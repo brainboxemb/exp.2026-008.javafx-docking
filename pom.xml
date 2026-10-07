@@ -12,7 +12,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>21</maven.compiler.release>
     <javafx.version>21.0.10</javafx.version>
-    <jmetro.version>11.6.15</jmetro.version>
+    <transit.version>2.0.0</transit.version>
     <snapfx.version>0.8.0-0</snapfx.version>
     <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
     <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
@@ -25,9 +25,9 @@
       <version>${javafx.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.jfxtras</groupId>
-      <artifactId>jmetro</artifactId>
-      <version>${jmetro.version}</version>
+      <groupId>com.pixelduke</groupId>
+      <artifactId>transit</artifactId>
+      <version>${transit.version}</version>
     </dependency>
     <dependency>
       <groupId>org.snapfx</groupId>

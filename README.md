@@ -21,10 +21,12 @@ The experiment is intentionally separate from the production Development Client.
 - Java 21
 - JavaFX 21
 - Maven
-- JMetro as application look-and-feel baseline
+- Transit 2.0.0 as application look-and-feel baseline
 - SnapFX as the first docking candidate
 
-SnapFX is evaluated first, not assumed to be the final choice. Other docking libraries may be added when a concrete unresolved question requires comparison.
+Transit and SnapFX are evaluated as replaceable infrastructure around ordinary JavaFX views. The application panels must not depend on either theme or docking-specific APIs unless the experiment proves that such coupling is unavoidable.
+
+SnapFX is evaluated first, not assumed to be the final docking choice. Other docking libraries may be added when a concrete unresolved question requires comparison.
 
 ## Questions
 
@@ -34,9 +36,10 @@ The first SnapFX proof of principle must answer:
 2. Can panels be floated, moved between windows and docked again reliably?
 3. Does the layout behave well with tables, log consoles and a continuously updating plot-like view?
 4. Can split positions, tabs and floating-window geometry be saved and restored?
-5. Can JMetro style the application controls while SnapFX supplies only the workbench/docking chrome?
-6. Can Terminal, Device Log and Client Log remain dark/monospace inside a light workbench?
-7. Is SnapFX practical to consume reproducibly from the Maven-based Development Client?
+5. Can Transit style normal application controls while SnapFX supplies only the workbench/docking chrome?
+6. Does Transit 2.0.0 behave correctly on the experiment's Java 21 / JavaFX 21 baseline?
+7. Can Terminal, Device Log and Client Log remain dark/monospace inside a light workbench?
+8. Is SnapFX practical to consume reproducibly from the Maven-based Development Client?
 
 ## Representative workbench
 
@@ -63,7 +66,13 @@ The Tag Plot exists to exercise a dynamic/realtime view; it is not intended to i
 
 SnapFX currently targets Java 21+ / JavaFX 21+. The first candidate is pinned to tag `v0.8.0`.
 
-Until a normal Maven Central dependency is verified for the chosen version, the experiment should consume SnapFX through a reproducible local-publish step from the pinned upstream tag rather than committing third-party binaries.
+Until a normal Maven Central dependency is verified for the chosen version, the experiment consumes SnapFX through a reproducible local-publish step from the pinned upstream tag rather than committing third-party binaries.
+
+## Theme dependency
+
+Transit 2.0.0 is available from Maven Central as `com.pixelduke:transit:2.0.0`.
+
+The current Transit source uses Java 17 and JavaFX 22. Compatibility with this experiment's Java 21 / JavaFX 21 baseline is therefore an explicit qualification result rather than an assumption.
 
 ## Decision rule
 
@@ -72,7 +81,7 @@ Adoption requires at least:
 - reliable docking, tabbing, floating and redocking;
 - cross-window behaviour suitable for multi-monitor development use;
 - stable layout persistence and recovery;
-- acceptable CSS integration with JMetro;
+- acceptable CSS/theme integration with Transit;
 - clean separation between workbench infrastructure and panel/view code;
 - a reproducible Maven build path.
 

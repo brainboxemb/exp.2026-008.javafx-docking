@@ -1,5 +1,8 @@
 package io.github.brainboxemb.experimental.docking;
 
+import com.pixelduke.transit.Style;
+import com.pixelduke.transit.TransitStyleClass;
+import com.pixelduke.transit.TransitTheme;
 import io.github.brainboxemb.experimental.docking.workbench.PanelCatalog;
 import io.github.brainboxemb.experimental.docking.workbench.SnapFxWorkbench;
 import javafx.application.Application;
@@ -12,9 +15,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.JMetroStyleClass;
-import jfxtras.styles.jmetro.Style;
 import org.snapfx.persistence.DockLayoutLoadException;
 
 import java.io.IOException;
@@ -57,7 +57,7 @@ public final class DockingExperimentApplication extends Application {
 
         BorderPane root = new BorderPane();
         root.getStyleClass().add(
-                JMetroStyleClass.BACKGROUND);
+                TransitStyleClass.BACKGROUND);
         root.setTop(toolbar);
         root.setCenter(workbench.buildLayout());
 
@@ -66,10 +66,10 @@ public final class DockingExperimentApplication extends Application {
                 1280,
                 820);
 
-        new JMetro(Style.LIGHT).setScene(scene);
+        new TransitTheme(scene, Style.LIGHT);
 
         stage.setTitle(
-                "JavaFX Docking Experiment — SnapFX");
+                "JavaFX Docking Experiment — SnapFX + Transit");
         stage.setScene(scene);
 
         workbench.initialize(stage);

@@ -4,11 +4,18 @@
 
 Can a JavaFX docking framework provide a maintainable IDE-style workbench for the Event Timing Development Client without coupling individual views to the docking framework?
 
-## Candidate 1 — SnapFX
+## Candidate 1 — SnapFX + Transit
 
-Use SnapFX first with Java 21, JavaFX 21, Maven and JMetro.
+Use SnapFX first with:
+
+- Java 21;
+- JavaFX 21;
+- Maven;
+- Transit 2.0.0 for the application look and feel.
 
 Pin the upstream SnapFX source to tag `v0.8.0` for repeatability.
+
+Transit is consumed from Maven Central. Its current source targets Java 17 and JavaFX 22, so JavaFX 21 compatibility is a qualification question rather than an assumed property.
 
 ## Representative panels
 
@@ -33,12 +40,15 @@ The Tag Plot is only a dynamic-view workload. It is not production plotting code
 5. Drag between main and floating windows.
 6. Save and restore layout.
 7. Recreate panels from stable IDs.
-8. Combine JMetro with SnapFX CSS.
-9. Keep Terminal and logs dark/monospace.
-10. Verify a reproducible Maven dependency/build path.
+8. Combine Transit with SnapFX CSS/chrome.
+9. Verify Transit 2.0.0 on Java 21 / JavaFX 21.
+10. Keep Terminal and logs dark/monospace.
+11. Verify a reproducible Maven dependency/build path.
 
 ## Exit criteria
 
 SnapFX is suitable for a production spike when core docking behaviour is reliable, layout restore works across restart, panel implementations stay docking-independent, styling is acceptable, and the build/dependency path is reproducible.
 
-If those criteria fail, record the failure and evaluate the next candidate against the same representative workbench.
+Transit is suitable as the theme baseline when ordinary JavaFX controls, floating scenes and the SnapFX chrome coexist correctly on Java 21 / JavaFX 21 without requiring view-specific theme coupling.
+
+If either candidate fails those criteria, record the failure and evaluate the next candidate only against the unresolved requirement.
