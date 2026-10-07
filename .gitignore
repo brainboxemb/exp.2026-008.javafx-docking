@@ -1,0 +1,7 @@
+target/
+.idea/
+*.iml
+nbproject/private/
+.vscode/
+*.log
+layout.json
