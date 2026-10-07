@@ -1,0 +1,40 @@
+.root {
+    -fx-font-size: 12px;
+}
+
+.experiment-toolbar {
+    -fx-alignment: center-left;
+    -fx-background-color: #f5f6f7;
+    -fx-border-color: #d7d9dc;
+    -fx-border-width: 0 0 1 0;
+}
+
+.experiment-tool-panel {
+    -fx-padding: 12px;
+}
+
+.experiment-panel-heading {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.experiment-table-panel {
+    -fx-padding: 0;
+}
+
+.experiment-log {
+    -fx-font-family: "Consolas";
+    -fx-font-size: 11px;
+    -fx-control-inner-background: #111418;
+    -fx-text-fill: #e8e8e8;
+    -fx-highlight-fill: #355b7d;
+    -fx-highlight-text-fill: white;
+}
+
+.experiment-log .content {
+    -fx-background-color: #111418;
+}
+
+.experiment-tag-plot {
+    -fx-padding: 4px;
+}

@@ -1,54 +1,115 @@
 package io.github.brainboxemb.experimental.docking;
 
+import io.github.brainboxemb.experimental.docking.workbench.PanelCatalog;
+import io.github.brainboxemb.experimental.docking.workbench.SnapFxWorkbench;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import jfxtras.styles.jmetro.Style;
-import org.snapfx.SnapFX;
+import org.snapfx.persistence.DockLayoutLoadException;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 public final class DockingExperimentApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        SnapFX snapFX = new SnapFX();
+        PanelCatalog catalog = new PanelCatalog();
+        SnapFxWorkbench workbench =
+                new SnapFxWorkbench(
+                        catalog,
+                        Path.of("layout.json"));
 
-        snapFX.dock(toolPanel("TimingNode", "Timing node controls"), "TimingNode");
-        snapFX.dock(toolPanel("Registrations", "Registration table placeholder"), "Registrations");
-        snapFX.dock(logPanel("Terminal"), "Terminal");
-        snapFX.dock(logPanel("Device Log"), "Device Log");
-        snapFX.dock(logPanel("Client Log"), "Client Log");
-        snapFX.dock(toolPanel("LogBook", "LogBook table placeholder"), "LogBook");
-        snapFX.dock(toolPanel("Tag Plot", "Realtime tag plot placeholder"), "Tag Plot");
+        Label status = new Label(
+                "Default experiment layout");
 
-        BorderPane root = new BorderPane(snapFX.buildLayout());
-        Scene scene = new Scene(root, 1280, 820);
+        Button saveLayout = new Button("Save layout");
+        saveLayout.setOnAction(event ->
+                saveLayout(workbench, status));
+
+        Button loadLayout = new Button("Load layout");
+        loadLayout.setOnAction(event ->
+                loadLayout(workbench, status));
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        HBox toolbar = new HBox(
+                8,
+                saveLayout,
+                loadLayout,
+                spacer,
+                status);
+        toolbar.setPadding(
+                new Insets(6, 8, 6, 8));
+        toolbar.getStyleClass().add(
+                "experiment-toolbar");
+
+        BorderPane root = new BorderPane();
+        root.getStyleClass().add(
+                JMetroStyleClass.BACKGROUND);
+        root.setTop(toolbar);
+        root.setCenter(workbench.buildLayout());
+
+        Scene scene = new Scene(
+                root,
+                1280,
+                820);
+
         new JMetro(Style.LIGHT).setScene(scene);
 
-        stage.setTitle("JavaFX Docking Experiment — SnapFX");
+        stage.setTitle(
+                "JavaFX Docking Experiment — SnapFX");
         stage.setScene(scene);
-        snapFX.initialize(stage);
+
+        workbench.initialize(stage);
+
+        scene.getStylesheets().add(
+                DockingExperimentApplication.class
+                        .getResource("/experiment.css")
+                        .toExternalForm());
+
         stage.show();
     }
 
-    private static VBox toolPanel(String title, String text) {
-        VBox panel = new VBox(8, new Label(title), new Label(text));
-        panel.setStyle("-fx-padding: 12;");
-        return panel;
+    private static void saveLayout(
+            SnapFxWorkbench workbench,
+            Label status) {
+        try {
+            workbench.saveLayout();
+            status.setText(
+                    "Saved " + workbench.layoutFile());
+        } catch (IOException exception) {
+            status.setText(
+                    "Save failed: " + exception.getMessage());
+        }
     }
 
-    private static TextArea logPanel(String title) {
-        TextArea area = new TextArea(title + "\n");
-        area.setEditable(false);
-        area.setStyle(
-                "-fx-font-family: 'Consolas';"
-                + "-fx-control-inner-background: #111418;"
-                + "-fx-text-fill: #e8e8e8;");
-        return area;
+    private static void loadLayout(
+            SnapFxWorkbench workbench,
+            Label status) {
+        try {
+            if (workbench.loadLayout()) {
+                status.setText(
+                        "Loaded " + workbench.layoutFile());
+            } else {
+                status.setText(
+                        "No saved layout yet");
+            }
+        } catch (IOException | DockLayoutLoadException exception) {
+            status.setText(
+                    "Load failed: " + exception.getMessage());
+        }
     }
 
     public static void main(String[] args) {

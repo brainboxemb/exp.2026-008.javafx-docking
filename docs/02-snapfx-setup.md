@@ -1,11 +1,61 @@
 # 02 — SnapFX setup
 
-The experiment pins SnapFX to upstream tag `v0.8.0`.
+The experiment pins SnapFX release tag `v0.8.0`.
 
-At the time this experiment was initialized, the upstream project documents Java 21+ / JavaFX 21+ and provides Maven publication metadata, but normal Maven Central consumption for the selected release still needs to be verified.
+Exact upstream source:
 
-For the first local run, use a source checkout of the pinned tag and publish `snapfx-core` to the local Maven repository before building this experiment.
+```text
+Beowolve/SnapFX
+tag: v0.8.0
+commit: 6253f6443c74718b2bb8f861835dc97c6f5e374f
+```
 
-The experiment intentionally does not commit a third-party SnapFX JAR.
+The published release contains `snapfx-core-0.8.0-0.jar`. The experiment Maven model therefore consumes:
 
-Once Maven Central availability is confirmed for the exact selected version, replace the local-publish prerequisite with the normal repository dependency and record that result here.
+```text
+org.snapfx:snapfx-core:0.8.0-0
+```
+
+## Reproducible build path
+
+Normal Maven Central availability for this exact artifact is not assumed.
+
+CI uses the following controlled path:
+
+1. checkout the experiment source;
+2. set up Temurin Java 21;
+3. checkout SnapFX tag `v0.8.0`;
+4. assert that the tag resolves to exact commit
+   `6253f6443c74718b2bb8f861835dc97c6f5e374f`;
+5. run the upstream Gradle wrapper task
+   `:snapfx-core:publishToMavenLocal`;
+6. assert that Maven-local contains
+   `org.snapfx:snapfx-core:0.8.0-0`;
+7. run `mvn verify` for this experiment.
+
+This keeps upstream source and dependency metadata intact and avoids committing
+third-party binary JARs.
+
+## Local use
+
+For a local run, first check out the same exact SnapFX tag and publish its core
+module to Maven local:
+
+```text
+git clone https://github.com/Beowolve/SnapFX.git
+cd SnapFX
+git checkout v0.8.0
+./gradlew :snapfx-core:publishToMavenLocal
+```
+
+Then run the experiment with:
+
+```text
+mvn javafx:run
+```
+
+The normal experiment build is:
+
+```text
+mvn verify
+```

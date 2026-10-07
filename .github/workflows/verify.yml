@@ -1,0 +1,57 @@
+name: Verify experiment
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout experiment
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Java 21
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Checkout pinned SnapFX source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: Beowolve/SnapFX
+          ref: v0.8.0
+          fetch-depth: 0
+          path: .deps/SnapFX
+
+      - name: Verify SnapFX source pin
+        shell: bash
+        run: |
+          actual="$(git -C .deps/SnapFX rev-parse HEAD)"
+          expected="6253f6443c74718b2bb8f861835dc97c6f5e374f"
+          test "$actual" = "$expected"
+
+      - name: Publish pinned SnapFX core to local Maven repository
+        shell: bash
+        run: |
+          chmod +x .deps/SnapFX/gradlew
+          .deps/SnapFX/gradlew             --no-daemon             --project-dir .deps/SnapFX             :snapfx-core:publishToMavenLocal
+
+      - name: Verify SnapFX Maven artifact
+        shell: bash
+        run: |
+          test -f "$HOME/.m2/repository/org/snapfx/snapfx-core/0.8.0-0/snapfx-core-0.8.0-0.jar"
+          test -f "$HOME/.m2/repository/org/snapfx/snapfx-core/0.8.0-0/snapfx-core-0.8.0-0.pom"
+
+      - name: Verify experiment build
+        shell: bash
+        run: mvn -B -ntp verify
