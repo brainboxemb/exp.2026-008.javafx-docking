@@ -2,6 +2,8 @@
 
 Proof-of-principle repository for evaluating an IDE-style dockable JavaFX workbench for the Event Timing Development Client.
 
+Cross-project coordination: [brainboxemb.meta Experiment 008](https://github.com/brainboxemb/brainboxemb.meta/blob/main/experiments/008-javafx-docking/README.md), tracking issue [brainboxemb.meta#183](https://github.com/brainboxemb/brainboxemb.meta/issues/183).
+
 ## Goal
 
 Determine whether a docking framework can provide a maintainable workbench for current and future Development Client tools such as:
