@@ -18,9 +18,13 @@ import javafx.stage.Stage;
 import org.snapfx.persistence.DockLayoutLoadException;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 
 public final class DockingExperimentApplication extends Application {
+
+    private static final Style THEME_STYLE =
+            Style.LIGHT;
 
     @Override
     public void start(Stage stage) {
@@ -30,19 +34,32 @@ public final class DockingExperimentApplication extends Application {
                         catalog,
                         Path.of("layout.json"));
 
+        URL applicationStylesheet =
+                DockingExperimentApplication.class
+                        .getResource("/experiment.css");
+
+        workbench.setSceneDecorator(
+                scene -> decorateScene(
+                        scene,
+                        applicationStylesheet));
+
         Label status = new Label(
                 "Default experiment layout");
 
-        Button saveLayout = new Button("Save layout");
+        Button saveLayout =
+                new Button("Save layout");
         saveLayout.setOnAction(event ->
                 saveLayout(workbench, status));
 
-        Button loadLayout = new Button("Load layout");
+        Button loadLayout =
+                new Button("Load layout");
         loadLayout.setOnAction(event ->
                 loadLayout(workbench, status));
 
         Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+        HBox.setHgrow(
+                spacer,
+                Priority.ALWAYS);
 
         HBox toolbar = new HBox(
                 8,
@@ -59,27 +76,39 @@ public final class DockingExperimentApplication extends Application {
         root.getStyleClass().add(
                 TransitStyleClass.BACKGROUND);
         root.setTop(toolbar);
-        root.setCenter(workbench.buildLayout());
+        root.setCenter(
+                workbench.buildLayout());
 
         Scene scene = new Scene(
                 root,
                 1280,
                 820);
 
-        new TransitTheme(scene, Style.LIGHT);
-
         stage.setTitle(
                 "JavaFX Docking Experiment — SnapFX + Transit");
         stage.setScene(scene);
 
         workbench.initialize(stage);
-
-        scene.getStylesheets().add(
-                DockingExperimentApplication.class
-                        .getResource("/experiment.css")
-                        .toExternalForm());
-
         stage.show();
+    }
+
+    private static void decorateScene(
+            Scene scene,
+            URL applicationStylesheet) {
+        new TransitTheme(
+                scene,
+                THEME_STYLE);
+
+        if (applicationStylesheet == null) {
+            return;
+        }
+
+        String stylesheet =
+                applicationStylesheet.toExternalForm();
+
+        if (!scene.getStylesheets().contains(stylesheet)) {
+            scene.getStylesheets().add(stylesheet);
+        }
     }
 
     private static void saveLayout(
@@ -91,7 +120,8 @@ public final class DockingExperimentApplication extends Application {
                     "Saved " + workbench.layoutFile());
         } catch (IOException exception) {
             status.setText(
-                    "Save failed: " + exception.getMessage());
+                    "Save failed: "
+                    + exception.getMessage());
         }
     }
 
@@ -101,14 +131,17 @@ public final class DockingExperimentApplication extends Application {
         try {
             if (workbench.loadLayout()) {
                 status.setText(
-                        "Loaded " + workbench.layoutFile());
+                        "Loaded "
+                        + workbench.layoutFile());
             } else {
                 status.setText(
                         "No saved layout yet");
             }
-        } catch (IOException | DockLayoutLoadException exception) {
+        } catch (IOException
+                | DockLayoutLoadException exception) {
             status.setText(
-                    "Load failed: " + exception.getMessage());
+                    "Load failed: "
+                    + exception.getMessage());
         }
     }
 
