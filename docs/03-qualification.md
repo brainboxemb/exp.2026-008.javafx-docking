@@ -28,6 +28,10 @@ Run on both:
 - Ubuntu 24.04;
 - Windows 2025.
 
+Status: **passed** on source `fcce3ae9b7a8811b6c57c2352b707fb392d34ea2`.
+
+Evidence: workflow run [37733421797](https://github.com/brainboxemb/exp.2026-008.javafx-docking/actions/runs/37733421797) completed successfully on both runners. The pinned SnapFX source was published to Maven local and `mvn verify` completed successfully in both jobs.
+
 ### Q-02 — Stable panel identity and layout reconstruction
 
 Question: can a saved SnapFX layout reconstruct ordinary JavaFX panels through stable application-owned IDs?
@@ -41,6 +45,10 @@ Pass when the automated round-trip test:
 - restores every expected panel ID.
 
 This test deliberately uses plain JavaFX `Group` nodes so it does not depend on a visible desktop or JavaFX control toolkit.
+
+Status: **passed** on source `fcce3ae9b7a8811b6c57c2352b707fb392d34ea2`.
+
+Evidence: workflow run [37733421797](https://github.com/brainboxemb/exp.2026-008.javafx-docking/actions/runs/37733421797) ran `SnapFxLayoutPersistenceTest` on both Ubuntu and Windows: 1 test, 0 failures, 0 errors, 0 skipped.
 
 ## Interactive qualification
 

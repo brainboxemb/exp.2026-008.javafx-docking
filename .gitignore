@@ -5,3 +5,4 @@ nbproject/private/
 .vscode/
 *.log
 layout.json
+.deps/

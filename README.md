@@ -74,6 +74,16 @@ Transit 2.0.0 is available from Maven Central as `com.pixelduke:transit:2.0.0`.
 
 The current Transit source uses Java 17 and JavaFX 22. Compatibility with this experiment's Java 21 / JavaFX 21 baseline is therefore an explicit qualification result rather than an assumption.
 
+## Run on Windows
+
+For the interactive qualification on a Windows workstation with Java 21 and Maven available:
+
+```powershell
+.\run.ps1
+```
+
+The script checks out the exact SnapFX source used by CI, publishes `snapfx-core` to Maven local, runs `mvn verify`, and then launches the experiment. Use `.\run.ps1 -VerifyOnly` to prepare and verify without opening the UI.
+
 ## Decision rule
 
 Adoption requires at least:
