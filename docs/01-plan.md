@@ -67,6 +67,10 @@ The Tag Plot is only a dynamic-view workload. It is not production plotting code
 11. Keep Terminal and logs dark/monospace.
 12. Verify a reproducible Maven dependency/build path.
 
+## Qualification record
+
+Detailed qualification cases and evidence rules are in [03 — Qualification](03-qualification.md).
+
 ## Exit criteria
 
 SnapFX is suitable for a production spike when core docking behaviour is reliable, layout restore works across restart, panel implementations stay docking-independent, styling is acceptable, and the build/dependency path is reproducible.

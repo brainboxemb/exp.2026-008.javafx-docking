@@ -12,7 +12,15 @@ permissions:
 
 jobs:
   verify:
-    runs-on: ubuntu-24.04
+    name: Verify (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-24.04
+          - windows-2025
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout experiment
@@ -40,18 +48,44 @@ jobs:
           expected="6253f6443c74718b2bb8f861835dc97c6f5e374f"
           test "$actual" = "$expected"
 
-      - name: Publish pinned SnapFX core to local Maven repository
+      - name: Publish pinned SnapFX core to Maven local (Linux)
+        if: runner.os == 'Linux'
         shell: bash
         run: |
           chmod +x .deps/SnapFX/gradlew
-          .deps/SnapFX/gradlew             --no-daemon             --project-dir .deps/SnapFX             :snapfx-core:publishToMavenLocal
+          .deps/SnapFX/gradlew \
+            --no-daemon \
+            --project-dir .deps/SnapFX \
+            :snapfx-core:publishToMavenLocal
 
-      - name: Verify SnapFX Maven artifact
+      - name: Publish pinned SnapFX core to Maven local (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          & .\.deps\SnapFX\gradlew.bat `
+            --no-daemon `
+            --project-dir .deps\SnapFX `
+            :snapfx-core:publishToMavenLocal
+
+      - name: Verify SnapFX Maven artifact (Linux)
+        if: runner.os == 'Linux'
         shell: bash
         run: |
           test -f "$HOME/.m2/repository/org/snapfx/snapfx-core/0.8.0-0/snapfx-core-0.8.0-0.jar"
           test -f "$HOME/.m2/repository/org/snapfx/snapfx-core/0.8.0-0/snapfx-core-0.8.0-0.pom"
 
-      - name: Verify experiment build
+      - name: Verify SnapFX Maven artifact (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $base = Join-Path $HOME ".m2\repository\org\snapfx\snapfx-core\0.8.0-0"
+          if (-not (Test-Path (Join-Path $base "snapfx-core-0.8.0-0.jar"))) {
+            throw "SnapFX JAR missing from Maven local"
+          }
+          if (-not (Test-Path (Join-Path $base "snapfx-core-0.8.0-0.pom"))) {
+            throw "SnapFX POM missing from Maven local"
+          }
+
+      - name: Verify experiment
         shell: bash
         run: mvn -B -ntp verify
