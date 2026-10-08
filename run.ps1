@@ -15,7 +15,7 @@ if (-not (Test-Path (Join-Path $snapFxDir ".git"))) {
     git clone --no-checkout $snapFxRepository $snapFxDir
 }
 
-git -C $snapFxDir fetch origin "refs/tags/$snapFxTag:refs/tags/$snapFxTag" --force
+git -C $snapFxDir fetch origin ("refs/tags/" + $snapFxTag + ":refs/tags/" + $snapFxTag) --force
 git -C $snapFxDir checkout --detach $snapFxCommit
 
 $actualCommit = (git -C $snapFxDir rev-parse HEAD).Trim()
