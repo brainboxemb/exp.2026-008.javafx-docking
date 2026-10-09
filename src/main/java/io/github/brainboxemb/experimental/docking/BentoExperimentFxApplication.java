@@ -21,6 +21,10 @@ public final class BentoExperimentFxApplication extends Application {
 
     @Override
     public void start(Stage stage) {
+        showCandidate(stage);
+    }
+
+    static void showCandidate(Stage stage) {
         PanelCatalog catalog = new PanelCatalog();
         BentoFxWorkbench workbench =
                 new BentoFxWorkbench(catalog);

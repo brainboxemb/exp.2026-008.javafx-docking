@@ -2,12 +2,13 @@ package io.github.brainboxemb.experimental.docking;
 
 import javafx.application.Application;
 
+import java.util.Locale;
+
 /**
  * Stable plain-Java entry point for the docking experiment.
  *
- * <p>This class deliberately does not extend {@link Application}. IDEs such as
- * NetBeans and Maven can therefore discover and invoke it as a normal main
- * class without relying on the JVM's special JavaFX launcher path.</p>
+ * <p>Without arguments this opens the candidate chooser. Pass {@code snapfx}
+ * or {@code bentofx} to launch a candidate directly.</p>
  */
 public final class DockingExperimentApplication {
 
@@ -15,8 +16,30 @@ public final class DockingExperimentApplication {
     }
 
     public static void main(String[] args) {
+        Class<? extends Application> applicationClass =
+                selectApplication(args);
+
         Application.launch(
-                DockingExperimentFxApplication.class,
+                applicationClass,
                 args);
+    }
+
+    private static Class<? extends Application> selectApplication(
+            String[] args) {
+        if (args.length == 0) {
+            return DockingExperimentChooserFxApplication.class;
+        }
+
+        String candidate =
+                args[0].trim().toLowerCase(Locale.ROOT);
+
+        return switch (candidate) {
+            case "snapfx", "snap" ->
+                    DockingExperimentFxApplication.class;
+            case "bentofx", "bento" ->
+                    BentoExperimentFxApplication.class;
+            default ->
+                    DockingExperimentChooserFxApplication.class;
+        };
     }
 }
