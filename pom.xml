@@ -45,6 +45,14 @@
           <groupId>org.openjfx</groupId>
           <artifactId>javafx-controls</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-media</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-web</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -68,6 +76,14 @@
         <exclusion>
           <groupId>org.openjfx</groupId>
           <artifactId>javafx-controls</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-media</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-web</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

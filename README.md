@@ -157,11 +157,14 @@ A failed experiment is valid evidence. Do not work around framework limitations 
 ## JavaFX runtime ownership
 
 The application owns the JavaFX runtime version. Transit and BentoFX are
-consumed with their transitive `org.openjfx` artifacts excluded.
+consumed with their transitive `org.openjfx` artifacts excluded, including
+base, graphics, controls, media and web.
 
 This is deliberate: Transit -> FXSkins 1.0.0 carries JavaFX 11.0.2 runtime
 metadata, while other libraries may publish against a different JavaFX minor
 release. Allowing those library-owned runtime artifacts onto the application
 classpath can create platform-specific mixed JavaFX runtimes.
 
-The experiment explicitly supplies JavaFX 21.0.10.
+The experiment explicitly supplies JavaFX 21.0.10. Automated qualification
+also rejects any other `org.openjfx` version appearing on the runtime
+classpath.
