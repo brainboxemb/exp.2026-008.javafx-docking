@@ -1,57 +1,65 @@
 # 02 — SnapFX setup
 
-The experiment pins SnapFX release tag `v0.8.0`.
+The experiment pins SnapFX release `v0.8.0`.
 
-Exact upstream source:
+Upstream release artifact:
 
 ```text
 Beowolve/SnapFX
-tag: v0.8.0
-commit: 6253f6443c74718b2bb8f861835dc97c6f5e374f
+release: v0.8.0
+artifact: snapfx-core-0.8.0-0.jar
+size: 261481 bytes
+SHA-256: 77c16fe87e795762aea4be0abb4ada12782503be1c9511c46b3e11b765354b3b
 ```
 
-The published release contains `snapfx-core-0.8.0-0.jar`. The experiment Maven model therefore consumes:
+The experiment Maven model consumes:
 
 ```text
 org.snapfx:snapfx-core:0.8.0-0
 ```
 
-## Reproducible build path
+## Dependency metadata
 
-Normal Maven Central availability for this exact artifact is not assumed.
+The upstream SnapFX core build declares:
 
-CI uses the following controlled path:
+```text
+com.google.code.gson:gson:2.10.1
+```
 
-1. checkout the experiment source;
-2. set up Temurin Java 21;
-3. checkout SnapFX tag `v0.8.0`;
-4. assert that the tag resolves to exact commit
-   `6253f6443c74718b2bb8f861835dc97c6f5e374f`;
-5. run the upstream Gradle wrapper task
-   `:snapfx-core:publishToMavenLocal`;
-6. assert that Maven-local contains
-   `org.snapfx:snapfx-core:0.8.0-0`;
-7. run `mvn verify` for this experiment.
+The GitHub Release contains the core JAR but no Maven POM asset. Therefore the
+experiment retains a small local bootstrap POM at
+`bootstrap/snapfx-core-0.8.0-0.pom` so installing the release JAR does not lose
+its Gson dependency metadata.
 
-This keeps upstream source and dependency metadata intact and avoids committing
-third-party binary JARs.
+That POM is metadata only; no SnapFX source or binary is committed to this
+repository.
+
+## Reproducible bootstrap path
+
+`bootstrap.ps1`:
+
+1. downloads only the upstream GitHub Release JAR;
+2. verifies the pinned SHA-256;
+3. installs the verified JAR into Maven local with
+   `maven-install-plugin:3.1.4`;
+4. uses the retained bootstrap POM so Gson remains a transitive dependency;
+5. verifies the expected JAR and POM exist under `~/.m2/repository`.
+
+CI runs the exact same bootstrap on Ubuntu 24.04 and Windows 2025 before
+`mvn verify`.
+
+No SnapFX Git checkout and no SnapFX Gradle build are required.
 
 ## Local use
 
 A clean Maven checkout cannot resolve SnapFX directly because the pinned artifact
 is not available from Maven Central.
 
-On Windows, use the repository bootstrap:
+Run:
 
 ```powershell
 .\bootstrap.ps1
 ```
-
-The script:
-
-1. checks out the exact pinned SnapFX commit;
-2. publishes `snapfx-core` to Maven local;
-3. verifies that the expected JAR and POM exist under `~/.m2/repository`.
 
 After that, ordinary Maven and NetBeans resolution works:
 
@@ -62,6 +70,6 @@ mvn javafx:run
 
 `run.ps1` combines bootstrap, verification and application launch.
 
-This distinction is part of the experiment result: the dependency path is
-reproducibly bootstrappable, but it is not yet a transparent clean-checkout Maven
-dependency path.
+This distinction remains part of the experiment result: the dependency is
+reproducibly bootstrappable from an official release artifact, but it is not yet
+a transparent Maven Central dependency.

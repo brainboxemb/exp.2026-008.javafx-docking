@@ -16,58 +16,42 @@ function Invoke-Native {
 }
 
 $root = $PSScriptRoot
-$snapFxDir = Join-Path $root ".deps\SnapFX"
-$snapFxRepository = "https://github.com/Beowolve/SnapFX.git"
-$snapFxTag = "v0.8.0"
-$snapFxCommit = "6253f6443c74718b2bb8f861835dc97c6f5e374f"
-$mavenArtifactDir = Join-Path $HOME ".m2\repository\org\snapfx\snapfx-core\0.8.0-0"
-$mavenJar = Join-Path $mavenArtifactDir "snapfx-core-0.8.0-0.jar"
-$mavenPom = Join-Path $mavenArtifactDir "snapfx-core-0.8.0-0.pom"
+$downloadDir = Join-Path $root ".deps\downloads"
 
-if (-not (Test-Path (Join-Path $snapFxDir ".git"))) {
-    New-Item -ItemType Directory -Force -Path (Split-Path $snapFxDir) | Out-Null
-    Invoke-Native -Command "git" -Arguments @(
-        "clone",
-        "--no-checkout",
-        $snapFxRepository,
-        $snapFxDir
-    )
+$snapFxVersion = "0.8.0-0"
+$snapFxRelease = "v0.8.0"
+$snapFxJarName = "snapfx-core-$snapFxVersion.jar"
+$snapFxJarUrl = "https://github.com/Beowolve/SnapFX/releases/download/$snapFxRelease/$snapFxJarName"
+$snapFxSha256 = "77c16fe87e795762aea4be0abb4ada12782503be1c9511c46b3e11b765354b3b"
+
+$downloadedJar = Join-Path $downloadDir $snapFxJarName
+$bootstrapPom = Join-Path $root "bootstrap\snapfx-core-0.8.0-0.pom"
+
+$mavenArtifactDir = Join-Path $HOME ".m2\repository\org\snapfx\snapfx-core\$snapFxVersion"
+$mavenJar = Join-Path $mavenArtifactDir $snapFxJarName
+$mavenPom = Join-Path $mavenArtifactDir "snapfx-core-$snapFxVersion.pom"
+
+New-Item -ItemType Directory -Force -Path $downloadDir | Out-Null
+
+Write-Host "Downloading SnapFX $snapFxRelease release JAR..."
+Invoke-WebRequest -Uri $snapFxJarUrl -OutFile $downloadedJar
+
+$actualSha256 = (Get-FileHash -Path $downloadedJar -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($actualSha256 -ne $snapFxSha256) {
+    throw "SnapFX SHA-256 mismatch. Expected $snapFxSha256 but got $actualSha256"
 }
 
-$tagRefSpec = "refs/tags/" + $snapFxTag + ":refs/tags/" + $snapFxTag
-
-Invoke-Native -Command "git" -Arguments @(
-    "-C",
-    $snapFxDir,
-    "fetch",
-    "origin",
-    $tagRefSpec,
-    "--force"
-)
-
-Invoke-Native -Command "git" -Arguments @(
-    "-C",
-    $snapFxDir,
-    "checkout",
-    "--detach",
-    $snapFxCommit
-)
-
-$actualCommit = (& git -C $snapFxDir rev-parse HEAD).Trim()
-if ($LASTEXITCODE -ne 0) {
-    throw "Unable to read SnapFX commit"
-}
-if ($actualCommit -ne $snapFxCommit) {
-    throw "Unexpected SnapFX source: $actualCommit"
+if (-not (Test-Path $bootstrapPom)) {
+    throw "Bootstrap POM missing: $bootstrapPom"
 }
 
-$gradleWrapper = Join-Path $snapFxDir "gradlew.bat"
-
-Invoke-Native -Command $gradleWrapper -Arguments @(
-    "--no-daemon",
-    "--project-dir",
-    $snapFxDir,
-    ":snapfx-core:publishToMavenLocal"
+Write-Host "Installing verified SnapFX JAR in Maven local..."
+Invoke-Native -Command "mvn" -Arguments @(
+    "-B",
+    "-ntp",
+    "org.apache.maven.plugins:maven-install-plugin:3.1.4:install-file",
+    "-Dfile=$downloadedJar",
+    "-DpomFile=$bootstrapPom"
 )
 
 if (-not (Test-Path $mavenJar)) {
@@ -77,5 +61,5 @@ if (-not (Test-Path $mavenPom)) {
     throw "SnapFX POM was not installed in Maven local: $mavenPom"
 }
 
-Write-Host "SnapFX $snapFxTag is available in Maven local."
+Write-Host "SnapFX $snapFxRelease is available in Maven local."
 Write-Host $mavenArtifactDir

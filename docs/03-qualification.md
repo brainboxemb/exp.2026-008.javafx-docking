@@ -7,8 +7,8 @@ Experiment 008 separates machine-verifiable evidence from interaction evidence t
 - Java 21
 - JavaFX 21.0.10
 - Transit 2.0.0 from Maven Central
-- SnapFX 0.8.0-0 built from upstream tag `v0.8.0`
-- exact SnapFX source commit `6253f6443c74718b2bb8f861835dc97c6f5e374f`
+- SnapFX 0.8.0-0 from upstream GitHub Release `v0.8.0`
+- pinned release JAR SHA-256 `77c16fe87e795762aea4be0abb4ada12782503be1c9511c46b3e11b765354b3b`
 
 ## Automated qualification
 
@@ -18,8 +18,9 @@ Question: can the experiment bootstrap and build from a clean runner without com
 
 Pass when:
 
-- exact SnapFX tag/commit is checked;
-- `snapfx-core` is published to Maven local from that source;
+- the exact SnapFX release JAR is downloaded;
+- its pinned SHA-256 is verified;
+- `snapfx-core` is installed into Maven local with retained Gson dependency metadata;
 - Transit resolves from Maven Central;
 - `mvn verify` succeeds.
 
@@ -30,7 +31,7 @@ Run on both:
 
 Status: **passed** on source `fcce3ae9b7a8811b6c57c2352b707fb392d34ea2`.
 
-Evidence: workflow run [37733421797](https://github.com/brainboxemb/exp.2026-008.javafx-docking/actions/runs/37733421797) completed successfully on both runners. The pinned SnapFX source was published to Maven local and `mvn verify` completed successfully in both jobs.
+Earlier evidence established the source-build route. Issue #5 replaces that heavier route with the official GitHub Release JAR bootstrap; its dedicated CI run is the authority for the release-artifact path.
 
 ### Q-01B — Clean Maven/IDE dependency resolution
 
@@ -45,7 +46,7 @@ Could not find artifact org.snapfx:snapfx-core:jar:0.8.0-0 in central
 ```
 
 SnapFX v0.8.0 is not published to Maven Central. The current PoP therefore
-requires `bootstrap.ps1` (or the equivalent CI source-build step) before normal
+requires `bootstrap.ps1` (or the equivalent CI release-artifact install step) before normal
 Maven/NetBeans dependency resolution works.
 
 Impact: this does not invalidate the docking behaviour PoP, but it is a
