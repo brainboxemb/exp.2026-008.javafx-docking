@@ -48,9 +48,11 @@ SnapFX floating windows create independent JavaFX scenes. The workbench therefor
 - Client Log
 - Registrations
 - LogBook
-- Tag Plot
+- Raw Data
 
-The Tag Plot is only a dynamic-view workload. It is not production plotting code.
+The Raw Data pane is application-owned detail context. It shows a representative
+latest event by default and the underlying message for the selected Registrations
+or LogBook row.
 
 ## Qualification
 
@@ -95,7 +97,7 @@ TimingNode / Registration /     Registrations
 Simulation (tabs)               ---------------------------
 ---------------------------     LogBook
 Device Log                      ---------------------------
----------------------------     Tag Plot
+---------------------------     Raw Data
 Terminal
 ---------------------------
 Client Log
