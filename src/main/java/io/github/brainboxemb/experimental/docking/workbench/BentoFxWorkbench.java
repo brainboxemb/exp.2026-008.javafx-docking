@@ -22,7 +22,7 @@ public final class BentoFxWorkbench {
 
     private final PanelCatalog catalog;
     private final Bento bento =
-            new Bento("event-timing-experiment");
+            new Bento();
     private final DockContainerRootBranch root;
 
     public BentoFxWorkbench(
