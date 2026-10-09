@@ -38,24 +38,30 @@ third-party binary JARs.
 
 ## Local use
 
-For a local run, first check out the same exact SnapFX tag and publish its core
-module to Maven local:
+A clean Maven checkout cannot resolve SnapFX directly because the pinned artifact
+is not available from Maven Central.
 
-```text
-git clone https://github.com/Beowolve/SnapFX.git
-cd SnapFX
-git checkout v0.8.0
-./gradlew :snapfx-core:publishToMavenLocal
+On Windows, use the repository bootstrap:
+
+```powershell
+.\bootstrap.ps1
 ```
 
-Then run the experiment with:
+The script:
 
-```text
-mvn javafx:run
-```
+1. checks out the exact pinned SnapFX commit;
+2. publishes `snapfx-core` to Maven local;
+3. verifies that the expected JAR and POM exist under `~/.m2/repository`.
 
-The normal experiment build is:
+After that, ordinary Maven and NetBeans resolution works:
 
 ```text
 mvn verify
+mvn javafx:run
 ```
+
+`run.ps1` combines bootstrap, verification and application launch.
+
+This distinction is part of the experiment result: the dependency path is
+reproducibly bootstrappable, but it is not yet a transparent clean-checkout Maven
+dependency path.

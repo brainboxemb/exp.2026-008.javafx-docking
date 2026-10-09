@@ -4,6 +4,31 @@ Proof-of-principle repository for evaluating an IDE-style dockable JavaFX workbe
 
 Cross-project coordination: [brainboxemb.meta Experiment 008](https://github.com/brainboxemb/brainboxemb.meta/blob/main/experiments/008-javafx-docking/README.md), tracking issue [brainboxemb.meta#183](https://github.com/brainboxemb/brainboxemb.meta/issues/183).
 
+## Local quick start
+
+SnapFX v0.8.0 is **not available from Maven Central**. On a clean checkout, plain `mvn verify`, `mvn javafx:run` and the initial NetBeans Maven import therefore cannot resolve `org.snapfx:snapfx-core:0.8.0-0` yet.
+
+On Windows, bootstrap the pinned SnapFX dependency once:
+
+```powershell
+.\bootstrap.ps1
+```
+
+After that, normal Maven commands work because SnapFX is present in the local Maven repository:
+
+```powershell
+mvn verify
+mvn javafx:run
+```
+
+For NetBeans, run `.\bootstrap.ps1` once and then reload/reopen the Maven project. Repeat the bootstrap only when the pinned SnapFX version changes or the local Maven repository is cleared.
+
+To bootstrap, verify and launch in one command:
+
+```powershell
+.\run.ps1
+```
+
 ## Goal
 
 Determine whether a docking framework can provide a maintainable workbench for current and future Development Client tools such as:
@@ -74,15 +99,9 @@ Transit 2.0.0 is available from Maven Central as `com.pixelduke:transit:2.0.0`.
 
 The current Transit source uses Java 17 and JavaFX 22. Compatibility with this experiment's Java 21 / JavaFX 21 baseline is therefore an explicit qualification result rather than an assumption.
 
-## Run on Windows
+## Windows helper
 
-For the interactive qualification on a Windows workstation with Java 21 and Maven available:
-
-```powershell
-.\run.ps1
-```
-
-The script checks out the exact SnapFX source used by CI, publishes `snapfx-core` to Maven local, runs `mvn verify`, and then launches the experiment. Use `.\run.ps1 -VerifyOnly` to prepare and verify without opening the UI.
+`bootstrap.ps1` owns the SnapFX source checkout and Maven-local publication. `run.ps1` calls that bootstrap first, runs `mvn verify`, and then launches the experiment. Use `.\run.ps1 -VerifyOnly` to bootstrap and verify without opening the UI.
 
 ## Decision rule
 
@@ -93,6 +112,7 @@ Adoption requires at least:
 - stable layout persistence and recovery;
 - acceptable CSS/theme integration with Transit;
 - clean separation between workbench infrastructure and panel/view code;
-- a reproducible Maven build path.
+- a reproducible Maven build path;
+- a normal Maven/IDE dependency path, or an explicitly accepted production packaging/repository strategy for SnapFX.
 
 A failed experiment is valid evidence. Do not work around framework limitations inside the mock views merely to make a candidate appear suitable.

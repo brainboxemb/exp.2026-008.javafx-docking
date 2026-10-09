@@ -12,9 +12,9 @@ Experiment 008 separates machine-verifiable evidence from interaction evidence t
 
 ## Automated qualification
 
-### Q-01 — Reproducible dependency and build path
+### Q-01A — Reproducible bootstrap build path
 
-Question: can the experiment build from a clean runner without committing third-party binaries?
+Question: can the experiment bootstrap and build from a clean runner without committing third-party binaries?
 
 Pass when:
 
@@ -31,6 +31,29 @@ Run on both:
 Status: **passed** on source `fcce3ae9b7a8811b6c57c2352b707fb392d34ea2`.
 
 Evidence: workflow run [37733421797](https://github.com/brainboxemb/exp.2026-008.javafx-docking/actions/runs/37733421797) completed successfully on both runners. The pinned SnapFX source was published to Maven local and `mvn verify` completed successfully in both jobs.
+
+### Q-01B — Clean Maven/IDE dependency resolution
+
+Question: can a developer clone the Maven project and immediately run `mvn verify`, `mvn javafx:run`, or import it into NetBeans without a dependency bootstrap step?
+
+Status: **not passed**.
+
+Observed result on a clean local Maven repository:
+
+```text
+Could not find artifact org.snapfx:snapfx-core:jar:0.8.0-0 in central
+```
+
+SnapFX v0.8.0 is not published to Maven Central. The current PoP therefore
+requires `bootstrap.ps1` (or the equivalent CI source-build step) before normal
+Maven/NetBeans dependency resolution works.
+
+Impact: this does not invalidate the docking behaviour PoP, but it is a
+production-adoption constraint. Production use should require either normal
+upstream repository publication, a controlled internal Maven repository, or an
+explicitly accepted alternative packaging strategy.
+
+Tracked by experiment issue #3.
 
 ### Q-02 — Stable panel identity and layout reconstruction
 
