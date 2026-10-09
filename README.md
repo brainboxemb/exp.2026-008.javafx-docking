@@ -60,10 +60,25 @@ The experiment is intentionally separate from the production Development Client.
 - Maven
 - Transit 2.0.0 as application look-and-feel baseline
 - SnapFX as the first docking candidate
+- BentoFX 0.16.0 as the second docking candidate
 
 Transit and SnapFX are evaluated as replaceable infrastructure around ordinary JavaFX views. The application panels must not depend on either theme or docking-specific APIs unless the experiment proves that such coupling is unavoidable.
 
-SnapFX is evaluated first, not assumed to be the final docking choice. Other docking libraries may be added when a concrete unresolved question requires comparison.
+SnapFX is evaluated first, not assumed to be the final docking choice. BentoFX is the second candidate because its explicit IDE-style root/branch/leaf model is a materially different architecture rather than a near-duplicate API.
+
+## Candidate launchers
+
+NetBeans can run either plain Java launcher:
+
+```text
+SnapFX:
+io.github.brainboxemb.experimental.docking.DockingExperimentApplication
+
+BentoFX:
+io.github.brainboxemb.experimental.docking.BentoExperimentApplication
+```
+
+Both use the same `PanelCatalog` mock views and Transit theme.
 
 ## Questions
 

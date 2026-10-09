@@ -78,3 +78,25 @@ SnapFX is suitable for a production spike when core docking behaviour is reliabl
 Transit is suitable as the theme baseline when ordinary JavaFX controls, floating scenes and the SnapFX chrome coexist correctly on Java 21 / JavaFX 21 without requiring view-specific theme coupling.
 
 If either candidate fails those criteria, record the failure and evaluate the next candidate only against the unresolved requirement.
+
+## Candidate 2 — BentoFX + Transit
+
+BentoFX 0.16.0 is evaluated against the same representative panels.
+
+The first comparison deliberately uses BentoFX as designed:
+
+- explicit root/branch/leaf layout;
+- tool-area sizing through the container model;
+- built-in external/floating stages;
+- Maven Central dependency;
+- application-owned compact CSS.
+
+Do not add application-owned layout persistence during the first BentoFX pass.
+If BentoFX has no equivalent of SnapFX JSON save/load, retain that as a candidate
+difference rather than hiding it.
+
+The BentoFX launcher is:
+
+```text
+io.github.brainboxemb.experimental.docking.BentoExperimentApplication
+```
