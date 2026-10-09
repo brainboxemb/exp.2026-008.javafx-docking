@@ -184,3 +184,19 @@ The experiment overrides SnapFX's 11 px tab-label default with 12 px JavaFX
 
 Pass when the tabs visually match the surrounding workbench and their float and
 close actions remain easy to use.
+
+### Q-12 — Local tab-group scope
+
+Question: does the TimingNode / Registration / Simulation tab strip belong only
+to the top-left control area instead of spanning the full workbench?
+
+The default SnapFX composition now builds the split tree before applying CENTER
+docking for local tab groups.
+
+Automated evidence verifies that:
+- the graph root is a `DockSplitPane`;
+- TimingNode, Registration and Simulation share one `DockTabPane`;
+- that tab pane is nested inside the split tree and is not the graph root.
+
+Interactive pass condition: the control-tab strip is visible only above its
+local panel area.

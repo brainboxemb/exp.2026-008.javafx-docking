@@ -162,6 +162,31 @@ public final class SnapFxWorkbench {
 
         graph.setRoot(timingNode);
 
+        /*
+         * Build the surrounding split structure before turning TimingNode into
+         * a local tab group. If CENTER docking happens first, the later splits
+         * are inserted inside one tab and the DockTabPane itself remains the
+         * root of the whole workbench, making its tab strip span all panels.
+         */
+        graph.dock(
+                registrations,
+                timingNode,
+                DockPosition.RIGHT);
+
+        graph.dock(
+                terminal,
+                timingNode,
+                DockPosition.BOTTOM);
+
+        graph.dock(
+                logBook,
+                registrations,
+                DockPosition.BOTTOM);
+
+        /*
+         * Only now create the local tab groups. These DockTabPane instances
+         * replace their leaf targets inside the already established split tree.
+         */
         graph.dock(
                 registration,
                 timingNode,
@@ -172,15 +197,6 @@ public final class SnapFxWorkbench {
                 DockPosition.CENTER);
 
         graph.dock(
-                registrations,
-                timingNode,
-                DockPosition.RIGHT);
-
-        graph.dock(
-                terminal,
-                timingNode,
-                DockPosition.BOTTOM);
-        graph.dock(
                 deviceLog,
                 terminal,
                 DockPosition.CENTER);
@@ -189,10 +205,6 @@ public final class SnapFxWorkbench {
                 terminal,
                 DockPosition.CENTER);
 
-        graph.dock(
-                logBook,
-                registrations,
-                DockPosition.BOTTOM);
         graph.dock(
                 tagPlot,
                 logBook,
