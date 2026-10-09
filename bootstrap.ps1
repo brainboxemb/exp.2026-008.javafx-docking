@@ -5,7 +5,7 @@ function Invoke-Native {
         [Parameter(Mandatory = $true)]
         [string]$Command,
 
-        [Parameter(ValueFromRemainingArguments = $true)]
+        [Parameter(Mandatory = $true)]
         [string[]]$Arguments
     )
 
@@ -26,13 +26,34 @@ $mavenPom = Join-Path $mavenArtifactDir "snapfx-core-0.8.0-0.pom"
 
 if (-not (Test-Path (Join-Path $snapFxDir ".git"))) {
     New-Item -ItemType Directory -Force -Path (Split-Path $snapFxDir) | Out-Null
-    Invoke-Native git clone --no-checkout $snapFxRepository $snapFxDir
+    Invoke-Native -Command "git" -Arguments @(
+        "clone",
+        "--no-checkout",
+        $snapFxRepository,
+        $snapFxDir
+    )
 }
 
-Invoke-Native git -C $snapFxDir fetch origin ("refs/tags/" + $snapFxTag + ":refs/tags/" + $snapFxTag) --force
-Invoke-Native git -C $snapFxDir checkout --detach $snapFxCommit
+$tagRefSpec = "refs/tags/" + $snapFxTag + ":refs/tags/" + $snapFxTag
 
-$actualCommit = (git -C $snapFxDir rev-parse HEAD).Trim()
+Invoke-Native -Command "git" -Arguments @(
+    "-C",
+    $snapFxDir,
+    "fetch",
+    "origin",
+    $tagRefSpec,
+    "--force"
+)
+
+Invoke-Native -Command "git" -Arguments @(
+    "-C",
+    $snapFxDir,
+    "checkout",
+    "--detach",
+    $snapFxCommit
+)
+
+$actualCommit = (& git -C $snapFxDir rev-parse HEAD).Trim()
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to read SnapFX commit"
 }
@@ -41,7 +62,13 @@ if ($actualCommit -ne $snapFxCommit) {
 }
 
 $gradleWrapper = Join-Path $snapFxDir "gradlew.bat"
-Invoke-Native $gradleWrapper --no-daemon --project-dir $snapFxDir :snapfx-core:publishToMavenLocal
+
+Invoke-Native -Command $gradleWrapper -Arguments @(
+    "--no-daemon",
+    "--project-dir",
+    $snapFxDir,
+    ":snapfx-core:publishToMavenLocal"
+)
 
 if (-not (Test-Path $mavenJar)) {
     throw "SnapFX JAR was not installed in Maven local: $mavenJar"

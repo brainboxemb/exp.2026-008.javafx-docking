@@ -9,7 +9,7 @@ function Invoke-Native {
         [Parameter(Mandatory = $true)]
         [string]$Command,
 
-        [Parameter(ValueFromRemainingArguments = $true)]
+        [Parameter(Mandatory = $true)]
         [string[]]$Arguments
     )
 
@@ -25,10 +25,16 @@ $root = $PSScriptRoot
 
 Push-Location $root
 try {
-    Invoke-Native mvn -B -ntp verify
+    Invoke-Native -Command "mvn" -Arguments @(
+        "-B",
+        "-ntp",
+        "verify"
+    )
 
     if (-not $VerifyOnly) {
-        Invoke-Native mvn javafx:run
+        Invoke-Native -Command "mvn" -Arguments @(
+            "javafx:run"
+        )
     }
 }
 finally {
