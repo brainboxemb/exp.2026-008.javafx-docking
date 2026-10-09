@@ -21,11 +21,21 @@ function Invoke-Native {
 
 $root = $PSScriptRoot
 
+$mavenWrapper = if ($IsWindows) {
+    Join-Path $root "mvnw.cmd"
+} else {
+    Join-Path $root "mvnw"
+}
+
+if (-not (Test-Path $mavenWrapper)) {
+    throw "Maven Wrapper missing: $mavenWrapper"
+}
+
 & (Join-Path $root "bootstrap.ps1")
 
 Push-Location $root
 try {
-    Invoke-Native -Command "mvn" -Arguments @(
+    Invoke-Native -Command $mavenWrapper -Arguments @(
         "-B",
         "-ntp",
         "verify"

@@ -45,8 +45,18 @@ if (-not (Test-Path $bootstrapPom)) {
     throw "Bootstrap POM missing: $bootstrapPom"
 }
 
+$mavenWrapper = if ($IsWindows) {
+    Join-Path $root "mvnw.cmd"
+} else {
+    Join-Path $root "mvnw"
+}
+
+if (-not (Test-Path $mavenWrapper)) {
+    throw "Maven Wrapper missing: $mavenWrapper"
+}
+
 Write-Host "Installing verified SnapFX JAR in Maven local..."
-Invoke-Native -Command "mvn" -Arguments @(
+Invoke-Native -Command $mavenWrapper -Arguments @(
     "-B",
     "-ntp",
     "org.apache.maven.plugins:maven-install-plugin:3.1.4:install-file",
