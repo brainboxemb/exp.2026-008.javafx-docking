@@ -29,6 +29,18 @@ To bootstrap, verify and launch in one command:
 .\run.ps1
 ```
 
+## NetBeans
+
+The executable main class is:
+
+```text
+io.github.brainboxemb.experimental.docking.DockingExperimentApplication
+```
+
+It is a plain Java launcher. The JavaFX lifecycle lives in
+`DockingExperimentFxApplication`. This mirrors the Event Timing Development
+Client setup so NetBeans Run and Debug can discover a normal main class.
+
 ## Goal
 
 Determine whether a docking framework can provide a maintainable workbench for current and future Development Client tools such as:
