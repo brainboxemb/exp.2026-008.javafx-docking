@@ -58,14 +58,10 @@ jobs:
             --project-dir .deps/SnapFX \
             :snapfx-core:publishToMavenLocal
 
-      - name: Publish pinned SnapFX core to Maven local (Windows)
+      - name: Bootstrap SnapFX dependency (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: |
-          & .\.deps\SnapFX\gradlew.bat `
-            --no-daemon `
-            --project-dir .deps\SnapFX `
-            :snapfx-core:publishToMavenLocal
+        run: .\bootstrap.ps1
 
       - name: Verify SnapFX Maven artifact (Linux)
         if: runner.os == 'Linux'
