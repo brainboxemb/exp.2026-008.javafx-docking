@@ -200,3 +200,37 @@ Automated evidence verifies that:
 
 Interactive pass condition: the control-tab strip is visible only above its
 local panel area.
+
+### Q-13 — Application stylesheet priority
+
+Question: do application-owned SnapFX tab metrics actually override SnapFX's
+built-in stylesheet after `SnapFX.initialize(...)`?
+
+The application stylesheet is now explicitly moved to the end of each managed
+Scene stylesheet list during decoration. This applies to the primary Scene and
+floating SnapFX Scenes.
+
+Pass when SnapFX dock-tab labels render with the configured 12 px System font
+instead of SnapFX's built-in 11 px rule.
+
+### Q-14 — Separate default tool areas
+
+Question: does the SnapFX default layout expose the same simultaneously visible
+tool areas as the BentoFX comparison?
+
+Pass when:
+- TimingNode / Registration / Simulation are the only default tab group;
+- Device Log, Terminal and Client Log are separate left-column areas;
+- Registrations, LogBook and Tag Plot are separate right-column areas.
+
+### Q-15 — Single-panel floating chrome
+
+Question: does a floating SnapFX window avoid showing the same panel title in
+both the floating-window title bar and an inner DockNode header?
+
+The adapter hides the inner DockNode header when a floating window contains one
+DockNode. If the floating graph later contains multiple nodes, inner headers are
+restored automatically after the floating layout rebuild.
+
+Pass when a single floated panel shows one title/chrome row while multi-panel
+floating layouts retain enough internal chrome for docking.

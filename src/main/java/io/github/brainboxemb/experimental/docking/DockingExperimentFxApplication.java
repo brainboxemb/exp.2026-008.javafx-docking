@@ -135,9 +135,13 @@ public final class DockingExperimentFxApplication extends Application {
         String stylesheet =
                 applicationStylesheet.toExternalForm();
 
-        if (!scene.getStylesheets().contains(stylesheet)) {
-            scene.getStylesheets().add(stylesheet);
-        }
+        /*
+         * SnapFX installs its managed stylesheet during initialize(). Keep the
+         * application stylesheet last so application-owned workbench metrics
+         * (font, density, chrome) override library defaults deterministically.
+         */
+        scene.getStylesheets().remove(stylesheet);
+        scene.getStylesheets().add(stylesheet);
     }
 
     private static void decorateShowingScene(
