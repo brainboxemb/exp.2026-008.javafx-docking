@@ -50,4 +50,4 @@ jobs:
 
       - name: Verify experiment
         shell: bash
-        run: mvn -B -ntp verify
+        run: ./mvnw -B -ntp verify

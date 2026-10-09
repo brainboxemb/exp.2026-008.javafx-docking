@@ -14,11 +14,11 @@ Bootstrap the pinned SnapFX dependency once:
 .\bootstrap.ps1
 ```
 
-After that, normal Maven commands work because SnapFX is present in the local Maven repository:
+After that, use the repository Maven Wrapper; no global Maven installation is required:
 
 ```powershell
-mvn verify
-mvn javafx:run
+.\\mvnw.cmd verify
+.\\mvnw.cmd javafx:run
 ```
 
 For NetBeans, run `.\bootstrap.ps1` once and then reload/reopen the Maven project. Repeat the bootstrap only when the pinned SnapFX version changes or the local Maven repository is cleared.
