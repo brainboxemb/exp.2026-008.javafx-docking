@@ -14,6 +14,7 @@ class JavaFxRuntimeCompatibilityTest {
 
     @Test
     void objectPropertyExposesMapFunction() throws Exception {
+
         Method method =
                 ObjectProperty.class.getMethod(
                         "map",

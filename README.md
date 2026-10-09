@@ -153,3 +153,15 @@ Adoption requires at least:
 - a normal Maven/IDE dependency path, or an explicitly accepted production packaging/repository strategy for SnapFX.
 
 A failed experiment is valid evidence. Do not work around framework limitations inside the mock views merely to make a candidate appear suitable.
+
+## JavaFX runtime ownership
+
+The application owns the JavaFX runtime version. Transit and BentoFX are
+consumed with their transitive `org.openjfx` artifacts excluded.
+
+This is deliberate: Transit -> FXSkins 1.0.0 carries JavaFX 11.0.2 runtime
+metadata, while other libraries may publish against a different JavaFX minor
+release. Allowing those library-owned runtime artifacts onto the application
+classpath can create platform-specific mixed JavaFX runtimes.
+
+The experiment explicitly supplies JavaFX 21.0.10.
