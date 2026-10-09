@@ -14,7 +14,8 @@ import javafx.scene.layout.HBox;
  */
 public final class LogBookPane extends BorderPane {
 
-    public LogBookPane() {
+    public LogBookPane(
+            RawDataModel rawDataModel) {
         TableView<LogBookRow> table =
                 new TableView<>(
                         FXCollections.observableArrayList(
@@ -48,6 +49,20 @@ public final class LogBookPane extends BorderPane {
         table.setFixedCellSize(24);
         table.setPlaceholder(
                 new Label("No logbook events"));
+
+        table.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(
+                        (observable, previous, selected) -> {
+                            if (selected != null) {
+                                rawDataModel.show(
+                                        "LOGBOOK",
+                                        selected.event()
+                                                + " · Team "
+                                                + selected.teamId(),
+                                        selected.rawJson());
+                            }
+                        });
 
         TableColumn<LogBookRow, String> time =
                 textColumn(
@@ -127,11 +142,37 @@ public final class LogBookPane extends BorderPane {
         return column;
     }
 
+    private static String logBookMessage(
+            long sequence,
+            String recordType,
+            String teamId,
+            String code,
+            String time) {
+        return """
+                {
+                  "sequenceNumber": %d,
+                  "recordType": "%s",
+                  "registrationId": "%s",
+                  "locationId": 1,
+                  "codes": ["%s"],
+                  "effectiveTime": "2026-10-09T%sZ",
+                  "recordedAt": "2026-10-09T%sZ"
+                }
+                """.formatted(
+                        sequence,
+                        recordType,
+                        teamId,
+                        code,
+                        time,
+                        time);
+    }
+
     private record LogBookRow(
             String time,
             String event,
             String teamId,
             String source,
-            String details) {
+            String details,
+            String rawJson) {
     }
 }
