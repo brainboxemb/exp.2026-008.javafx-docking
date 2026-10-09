@@ -168,8 +168,10 @@ public final class RegistrationsPane extends BorderPane {
                     "DELETED".equals(
                             row.state()));
             button.setOnAction(
-                    event ->
-                            row.markDeleted());
+                    event -> {
+                        row.markDeleted();
+                        button.setDisable(true);
+                    });
 
             setGraphic(button);
         }
