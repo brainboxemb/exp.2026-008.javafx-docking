@@ -1,5 +1,51 @@
 .root {
+    -fx-font-family: "System";
     -fx-font-size: 12px;
+}
+
+/*
+ * Transit intentionally uses Segoe UI / Segoe UI Semilight for many controls.
+ * The experiment keeps Transit for color/state styling, but lets JavaFX choose
+ * the platform-native system font for the application workbench.
+ */
+.label,
+Text,
+.button,
+.toggle-button,
+.table-cell,
+.table-view .column-header .label,
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label,
+.dock-node-title-label,
+.dock-sidebar-panel-title-label {
+    -fx-font-family: "System";
+}
+
+/* Compact control metrics for an IDE/diagnostic workbench. */
+.button,
+.toggle-button {
+    -fx-padding: 2px 7px 2px 7px;
+}
+
+/* Transit defaults to a 34 px tab height and generous horizontal padding. */
+.tab-pane,
+.dock-tab-pane {
+    -fx-tab-min-height: 26px;
+    -fx-tab-max-height: 26px;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab,
+.dock-tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-padding: 1px 8px 1px 8px;
+}
+
+/* SnapFX workbench chrome. */
+.dock-node-header {
+    -fx-padding: 2px 6px;
+}
+
+.dock-floating-title-bar,
+.dock-sidebar-panel-header {
+    -fx-padding: 2px 6px;
 }
 
 .experiment-toolbar {
@@ -10,7 +56,7 @@
 }
 
 .experiment-tool-panel {
-    -fx-padding: 12px;
+    -fx-padding: 10px;
 }
 
 .experiment-panel-heading {

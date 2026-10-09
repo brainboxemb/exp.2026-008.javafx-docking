@@ -67,13 +67,13 @@ public final class DockingExperimentFxApplication extends Application {
                 Priority.ALWAYS);
 
         HBox toolbar = new HBox(
-                8,
+                6,
                 saveLayout,
                 loadLayout,
                 spacer,
                 status);
         toolbar.setPadding(
-                new Insets(6, 8, 6, 8));
+                new Insets(4, 6, 4, 6));
         toolbar.getStyleClass().add(
                 "experiment-toolbar");
 
