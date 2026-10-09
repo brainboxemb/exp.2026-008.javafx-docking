@@ -24,25 +24,49 @@ public final class LogBookPane extends BorderPane {
                                         "AUTO_REG",
                                         "101",
                                         "antenna-1",
-                                        "tag EPC 3008...E21 accepted"),
+                                        "tag EPC 3008...E21 accepted",
+                                        logBookMessage(
+                                                41,
+                                                "ADD",
+                                                "101",
+                                                "AUTO",
+                                                "12:00:01.230")),
                                 new LogBookRow(
                                         "12:00:02.070",
                                         "MAN_REG",
                                         "204",
                                         "operator",
-                                        "manual registration"),
+                                        "manual registration",
+                                        logBookMessage(
+                                                42,
+                                                "ADD",
+                                                "204",
+                                                "MAN",
+                                                "12:00:02.070")),
                                 new LogBookRow(
                                         "12:00:03.910",
                                         "AUTO_REG",
                                         "318",
                                         "antenna-1",
-                                        "tag EPC 3008...A44 accepted"),
+                                        "tag EPC 3008...A44 accepted",
+                                        logBookMessage(
+                                                43,
+                                                "ADD",
+                                                "318",
+                                                "AUTO",
+                                                "12:00:03.910")),
                                 new LogBookRow(
                                         "12:00:04.140",
                                         "DELETE",
                                         "204",
                                         "operator",
-                                        "registration marked deleted")));
+                                        "registration marked deleted",
+                                        logBookMessage(
+                                                44,
+                                                "REV",
+                                                "204",
+                                                "MAN",
+                                                "12:00:04.140"))));
 
         table.getStyleClass().add(
                 "experiment-data-table");
