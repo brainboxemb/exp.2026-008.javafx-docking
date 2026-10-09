@@ -59,7 +59,7 @@ Determine whether a docking framework can provide a maintainable workbench for c
 - Terminal;
 - Device Log and Client Log;
 - Registrations and LogBook;
-- future realtime tag plots, inspectors and diagnostics.
+- Raw Data inspection and future diagnostics.
 
 The experiment is intentionally separate from the production Development Client. A successful result may inform a later migration; this repository is not the production implementation owner.
 
@@ -96,7 +96,7 @@ The first SnapFX proof of principle must answer:
 
 1. Can ordinary JavaFX views be docked as left/right/top/bottom/center tabs without leaking docking APIs into the view implementation?
 2. Can panels be floated, moved between windows and docked again reliably?
-3. Does the layout behave well with tables, log consoles and a continuously updating plot-like view?
+3. Does the layout behave well with tables, log consoles and a shared raw-message detail view?
 4. Can split positions, tabs and floating-window geometry be saved and restored?
 5. Can Transit style normal application controls while SnapFX supplies only the workbench/docking chrome?
 6. Does Transit 2.0.0 behave correctly on the experiment's Java 21 / JavaFX 21 baseline?
@@ -113,16 +113,14 @@ The PoP should use representative mock panels rather than production Event Timin
 | Registration /       |                      |
 | Simulation           |                      |
 +----------------------+----------------------+
-| Terminal /           | LogBook              |
-| Device Log /         |                      |
-| Client Log           |                      |
+| Device Log           | LogBook              |
+| Terminal              |                      |
+| Client Log            | Raw Data             |
 +----------------------+----------------------+
-
-Additional dockable:
-- Tag Plot
 ```
 
-The Tag Plot exists to exercise a dynamic/realtime view; it is not intended to implement production tag plotting.
+Raw Data shows a representative latest event by default and follows selection
+from Registrations and LogBook to expose the underlying message.
 
 ## SnapFX dependency
 
