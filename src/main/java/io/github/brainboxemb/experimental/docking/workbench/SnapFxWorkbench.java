@@ -213,8 +213,8 @@ public final class SnapFxWorkbench {
                 createDockNode(PanelCatalog.REGISTRATIONS);
         DockNode logBook =
                 createDockNode(PanelCatalog.LOGBOOK);
-        DockNode tagPlot =
-                createDockNode(PanelCatalog.TAG_PLOT);
+        DockNode rawData =
+                createDockNode(PanelCatalog.RAW_DATA);
 
         graph.setRoot(timingNode);
 
@@ -252,7 +252,7 @@ public final class SnapFxWorkbench {
                 registrations,
                 DockPosition.BOTTOM);
         graph.dock(
-                tagPlot,
+                rawData,
                 logBook,
                 DockPosition.BOTTOM);
 

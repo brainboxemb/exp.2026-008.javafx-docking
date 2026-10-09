@@ -86,13 +86,13 @@ Pass when the panel remains usable and no view-specific code is needed.
 
 ### Q-04 — Split resize
 
-Question: can split dividers be resized repeatedly with the table, logs and Tag Plot visible?
+Question: can split dividers be resized repeatedly with the table, logs and Raw Data visible?
 
 Pass when resizing remains responsive and content is not clipped into an unusable state.
 
 ### Q-05 — Float and redock
 
-Question: can Terminal, Device Log, Client Log and Tag Plot be floated and redocked?
+Question: can Terminal, Device Log, Client Log and Raw Data be floated and redocked?
 
 Pass when the same panel instance remains usable and the operation does not lose its content.
 
@@ -129,11 +129,17 @@ Question: can Terminal, Device Log and Client Log remain dark/monospace inside t
 
 Pass when floating/docking those panels does not replace their dark content styling.
 
-### Q-10 — Dynamic Tag Plot
+### Q-10 — Raw Data selection context
 
-Question: does the continuously updating Tag Plot remain live while tabbing, resizing, floating and redocking?
+Question: does the application-owned Raw Data pane follow meaningful application
+selection independently of the docking framework?
 
-Pass when updates continue without duplicate timelines, freezes or layout corruption.
+Pass when:
+- the pane shows a representative latest event before a table selection;
+- selecting a Registrations row shows that interpreted registration's
+  underlying message;
+- selecting a LogBook row shows that committed record's raw message;
+- moving/docking the views does not break that shared selection context.
 
 ## Evidence rule
 
@@ -221,7 +227,7 @@ tool areas as the BentoFX comparison?
 Pass when:
 - TimingNode / Registration / Simulation are the only default tab group;
 - Device Log, Terminal and Client Log are separate left-column areas;
-- Registrations, LogBook and Tag Plot are separate right-column areas.
+- Registrations, LogBook and Raw Data are separate right-column areas.
 
 ### Q-15 — Single-panel floating chrome
 

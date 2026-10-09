@@ -20,7 +20,12 @@ import javafx.scene.layout.HBox;
  */
 public final class RegistrationsPane extends BorderPane {
 
-    public RegistrationsPane() {
+    private final RawDataModel rawDataModel;
+
+    public RegistrationsPane(
+            RawDataModel rawDataModel) {
+        this.rawDataModel =
+                rawDataModel;
         TableView<RegistrationRow> table =
                 new TableView<>(
                         FXCollections.observableArrayList(
@@ -29,25 +34,55 @@ public final class RegistrationsPane extends BorderPane {
                                         "AUTO",
                                         "101",
                                         "AUTO",
-                                        "LIVE"),
+                                        "LIVE",
+                                        registrationMessage(
+                                                41,
+                                                "101",
+                                                "AUTO",
+                                                "12:00:01.230")),
                                 new RegistrationRow(
                                         "12:00:02.070",
                                         "MAN",
                                         "204",
                                         "MAN",
-                                        "LIVE"),
+                                        "LIVE",
+                                        registrationMessage(
+                                                42,
+                                                "204",
+                                                "MAN",
+                                                "12:00:02.070")),
                                 new RegistrationRow(
                                         "12:00:03.910",
                                         "AUTO",
                                         "318",
                                         "AUTO",
-                                        "LIVE")));
+                                        "LIVE",
+                                        registrationMessage(
+                                                43,
+                                                "318",
+                                                "AUTO",
+                                                "12:00:03.910"))));
 
         table.getStyleClass().add(
                 "experiment-data-table");
         table.setFixedCellSize(24);
         table.setPlaceholder(
                 new Label("No registrations"));
+
+        table.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(
+                        (observable, previous, selected) -> {
+                            if (selected != null) {
+                                rawDataModel.show(
+                                        "REGISTRATION",
+                                        "Team "
+                                                + selected.teamId()
+                                                + " · "
+                                                + selected.type(),
+                                        selected.rawJson());
+                            }
+                        });
 
         TableColumn<RegistrationRow, String> time =
                 textColumn(
@@ -164,7 +199,30 @@ public final class RegistrationsPane extends BorderPane {
         return column;
     }
 
-    private static final class DeleteCell
+    private static String registrationMessage(
+            long sequence,
+            String teamId,
+            String code,
+            String time) {
+        return """
+                {
+                  "sequenceNumber": %d,
+                  "recordType": "ADD",
+                  "registrationId": "%s",
+                  "locationId": 1,
+                  "codes": ["%s"],
+                  "effectiveTime": "2026-10-09T%sZ",
+                  "recordedAt": "2026-10-09T%sZ"
+                }
+                """.formatted(
+                        sequence,
+                        teamId,
+                        code,
+                        time,
+                        time);
+    }
+
+    private final class DeleteCell
             extends TableCell
                     <RegistrationRow, RegistrationRow> {
 
@@ -205,6 +263,11 @@ public final class RegistrationsPane extends BorderPane {
             button.setOnAction(
                     event -> {
                         row.markDeleted();
+                        rawDataModel.show(
+                                "REGISTRATION",
+                                "Delete team "
+                                        + row.teamId(),
+                                row.deleteMessage());
                         setGraphic(null);
                         getTableView().refresh();
                     });
@@ -220,13 +283,15 @@ public final class RegistrationsPane extends BorderPane {
         private final String teamId;
         private final String code;
         private final StringProperty state;
+        private final String rawJson;
 
         private RegistrationRow(
                 String time,
                 String type,
                 String teamId,
                 String code,
-                String state) {
+                String state,
+                String rawJson) {
             this.time = time;
             this.type = type;
             this.teamId = teamId;
@@ -234,6 +299,7 @@ public final class RegistrationsPane extends BorderPane {
             this.state =
                     new SimpleStringProperty(
                             state);
+            this.rawJson = rawJson;
         }
 
         private String time() {
@@ -250,6 +316,24 @@ public final class RegistrationsPane extends BorderPane {
 
         private String code() {
             return code;
+        }
+
+        private String rawJson() {
+            return rawJson;
+        }
+
+        private String deleteMessage() {
+            return """
+                    {
+                      "recordType": "REV",
+                      "registrationId": "%s",
+                      "codes": ["MAN"],
+                      "effectiveTime": "2026-10-09T%sZ",
+                      "reason": "operator delete"
+                    }
+                    """.formatted(
+                            teamId,
+                            time);
         }
 
         private String state() {

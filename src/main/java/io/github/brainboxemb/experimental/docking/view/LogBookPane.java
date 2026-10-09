@@ -14,7 +14,8 @@ import javafx.scene.layout.HBox;
  */
 public final class LogBookPane extends BorderPane {
 
-    public LogBookPane() {
+    public LogBookPane(
+            RawDataModel rawDataModel) {
         TableView<LogBookRow> table =
                 new TableView<>(
                         FXCollections.observableArrayList(
@@ -23,31 +24,69 @@ public final class LogBookPane extends BorderPane {
                                         "AUTO_REG",
                                         "101",
                                         "antenna-1",
-                                        "tag EPC 3008...E21 accepted"),
+                                        "tag EPC 3008...E21 accepted",
+                                        logBookMessage(
+                                                41,
+                                                "ADD",
+                                                "101",
+                                                "AUTO",
+                                                "12:00:01.230")),
                                 new LogBookRow(
                                         "12:00:02.070",
                                         "MAN_REG",
                                         "204",
                                         "operator",
-                                        "manual registration"),
+                                        "manual registration",
+                                        logBookMessage(
+                                                42,
+                                                "ADD",
+                                                "204",
+                                                "MAN",
+                                                "12:00:02.070")),
                                 new LogBookRow(
                                         "12:00:03.910",
                                         "AUTO_REG",
                                         "318",
                                         "antenna-1",
-                                        "tag EPC 3008...A44 accepted"),
+                                        "tag EPC 3008...A44 accepted",
+                                        logBookMessage(
+                                                43,
+                                                "ADD",
+                                                "318",
+                                                "AUTO",
+                                                "12:00:03.910")),
                                 new LogBookRow(
                                         "12:00:04.140",
                                         "DELETE",
                                         "204",
                                         "operator",
-                                        "registration marked deleted")));
+                                        "registration marked deleted",
+                                        logBookMessage(
+                                                44,
+                                                "REV",
+                                                "204",
+                                                "MAN",
+                                                "12:00:04.140"))));
 
         table.getStyleClass().add(
                 "experiment-data-table");
         table.setFixedCellSize(24);
         table.setPlaceholder(
                 new Label("No logbook events"));
+
+        table.getSelectionModel()
+                .selectedItemProperty()
+                .addListener(
+                        (observable, previous, selected) -> {
+                            if (selected != null) {
+                                rawDataModel.show(
+                                        "LOGBOOK",
+                                        selected.event()
+                                                + " · Team "
+                                                + selected.teamId(),
+                                        selected.rawJson());
+                            }
+                        });
 
         TableColumn<LogBookRow, String> time =
                 textColumn(
@@ -127,11 +166,37 @@ public final class LogBookPane extends BorderPane {
         return column;
     }
 
+    private static String logBookMessage(
+            long sequence,
+            String recordType,
+            String teamId,
+            String code,
+            String time) {
+        return """
+                {
+                  "sequenceNumber": %d,
+                  "recordType": "%s",
+                  "registrationId": "%s",
+                  "locationId": 1,
+                  "codes": ["%s"],
+                  "effectiveTime": "2026-10-09T%sZ",
+                  "recordedAt": "2026-10-09T%sZ"
+                }
+                """.formatted(
+                        sequence,
+                        recordType,
+                        teamId,
+                        code,
+                        time,
+                        time);
+    }
+
     private record LogBookRow(
             String time,
             String event,
             String teamId,
             String source,
-            String details) {
+            String details,
+            String rawJson) {
     }
 }

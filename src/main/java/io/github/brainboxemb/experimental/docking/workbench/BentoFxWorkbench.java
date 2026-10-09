@@ -65,8 +65,8 @@ public final class BentoFxWorkbench {
                 builder.leaf("registrations");
         DockContainerLeaf logBook =
                 builder.leaf("logbook");
-        DockContainerLeaf tagPlot =
-                builder.leaf("tag-plot");
+        DockContainerLeaf rawData =
+                builder.leaf("raw-data");
 
         root.setOrientation(
                 Orientation.HORIZONTAL);
@@ -88,7 +88,7 @@ public final class BentoFxWorkbench {
         rightColumn.addContainers(
                 registrations,
                 logBook,
-                tagPlot);
+                rawData);
 
         configureLeaf(controls);
         configureLeaf(deviceLog);
@@ -96,7 +96,7 @@ public final class BentoFxWorkbench {
         configureLeaf(clientLog);
         configureLeaf(registrations);
         configureLeaf(logBook);
-        configureLeaf(tagPlot);
+        configureLeaf(rawData);
 
         leftColumn.setPruneWhenEmpty(false);
         rightColumn.setPruneWhenEmpty(false);
@@ -152,10 +152,10 @@ public final class BentoFxWorkbench {
                         builder,
                         PanelCatalog.LOGBOOK));
 
-        tagPlot.addDockable(
+        rawData.addDockable(
                 dockable(
                         builder,
-                        PanelCatalog.TAG_PLOT));
+                        PanelCatalog.RAW_DATA));
     }
 
     public DockContainerRootBranch root() {
