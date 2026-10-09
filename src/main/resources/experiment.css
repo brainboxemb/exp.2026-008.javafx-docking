@@ -84,3 +84,24 @@ Text,
 .experiment-tag-plot {
     -fx-padding: 4px;
 }
+
+.experiment-chooser-heading {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.experiment-chooser-choice {
+    -fx-padding: 8px 0 0 0;
+}
+
+.experiment-chooser-choice > .button {
+    -fx-alignment: center-left;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 6px 10px;
+}
+
+.experiment-chooser-description {
+    -fx-opacity: 0.75;
+    -fx-padding: 0 4px;
+}

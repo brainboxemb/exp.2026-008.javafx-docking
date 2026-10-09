@@ -33,6 +33,10 @@ public final class DockingExperimentFxApplication extends Application {
 
     @Override
     public void start(Stage stage) {
+        showCandidate(stage);
+    }
+
+    static void showCandidate(Stage stage) {
         PanelCatalog catalog = new PanelCatalog();
         SnapFxWorkbench workbench =
                 new SnapFxWorkbench(

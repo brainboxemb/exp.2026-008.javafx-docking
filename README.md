@@ -31,15 +31,25 @@ To bootstrap, verify and launch in one command:
 
 ## NetBeans
 
-The executable main class is:
+The default executable main class is:
 
 ```text
 io.github.brainboxemb.experimental.docking.DockingExperimentApplication
 ```
 
-It is a plain Java launcher. The JavaFX lifecycle lives in
-`DockingExperimentFxApplication`. This mirrors the Event Timing Development
-Client setup so NetBeans Run and Debug can discover a normal main class.
+NetBeans **Run Project** and **Debug Project** open a small chooser with SnapFX
+and BentoFX. The chooser starts the selected candidate inside the same JavaFX
+process.
+
+For focused runs, the default launcher also accepts a candidate argument:
+
+```text
+snapfx
+bentofx
+```
+
+The direct BentoFX launcher remains available as
+`BentoExperimentApplication`.
 
 ## Goal
 
