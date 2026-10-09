@@ -44,7 +44,7 @@ public final class DockingExperimentFxApplication extends Application {
                         .getResource("/experiment.css");
 
         workbench.setSceneDecorator(
-                scene -> decorateScene(
+                scene -> decorateShowingScene(
                         scene,
                         applicationStylesheet));
 
@@ -89,20 +89,40 @@ public final class DockingExperimentFxApplication extends Application {
                 1280,
                 820);
 
+        /*
+         * Prepare CSS before the Stage owns the Scene. TransitTheme itself
+         * also touches the native Windows frame, which is only safe after
+         * Stage.show() has created the JavaFX native peer.
+         */
+        prepareScene(
+                scene,
+                applicationStylesheet);
+
         stage.setTitle(
                 "JavaFX Docking Experiment — SnapFX + Transit");
         stage.setScene(scene);
 
+        /*
+         * Keep SnapFX's documented lifecycle order:
+         * setScene -> initialize -> show.
+         */
         workbench.initialize(stage);
         stage.show();
+
+        /*
+         * Apply Transit after show so Windows native-frame theming sees a
+         * valid tkStage/native handle.
+         */
+        decorateShowingScene(
+                scene,
+                applicationStylesheet);
     }
 
-    private static void decorateScene(
+    private static void prepareScene(
             Scene scene,
             URL applicationStylesheet) {
-        new TransitTheme(
-                scene,
-                THEME_STYLE);
+        scene.setUserAgentStylesheet(
+                THEME_STYLE.getStyleStylesheetURL());
 
         if (applicationStylesheet == null) {
             return;
@@ -114,6 +134,23 @@ public final class DockingExperimentFxApplication extends Application {
         if (!scene.getStylesheets().contains(stylesheet)) {
             scene.getStylesheets().add(stylesheet);
         }
+    }
+
+    private static void decorateShowingScene(
+            Scene scene,
+            URL applicationStylesheet) {
+        prepareScene(
+                scene,
+                applicationStylesheet);
+
+        if (scene.getWindow() == null
+                || !scene.getWindow().isShowing()) {
+            return;
+        }
+
+        new TransitTheme(
+                scene,
+                THEME_STYLE);
     }
 
     private static void saveLayout(
