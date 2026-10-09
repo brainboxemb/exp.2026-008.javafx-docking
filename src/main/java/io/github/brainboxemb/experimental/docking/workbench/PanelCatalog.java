@@ -95,12 +95,12 @@ public final class PanelCatalog {
         heading.getStyleClass().add("experiment-panel-heading");
 
         HBox actions = new HBox(
-                8,
+                6,
                 new Button(firstAction),
                 new Button(secondAction));
 
         VBox box = new VBox(
-                10,
+                8,
                 heading,
                 new Label(description),
                 actions);
