@@ -4,33 +4,31 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+function Invoke-Native {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Command,
+
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$Arguments
+    )
+
+    & $Command @Arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "$Command failed with exit code $LASTEXITCODE"
+    }
+}
+
 $root = $PSScriptRoot
-$snapFxDir = Join-Path $root ".deps\SnapFX"
-$snapFxRepository = "https://github.com/Beowolve/SnapFX.git"
-$snapFxTag = "v0.8.0"
-$snapFxCommit = "6253f6443c74718b2bb8f861835dc97c6f5e374f"
 
-if (-not (Test-Path (Join-Path $snapFxDir ".git"))) {
-    New-Item -ItemType Directory -Force -Path (Split-Path $snapFxDir) | Out-Null
-    git clone --no-checkout $snapFxRepository $snapFxDir
-}
-
-git -C $snapFxDir fetch origin ("refs/tags/" + $snapFxTag + ":refs/tags/" + $snapFxTag) --force
-git -C $snapFxDir checkout --detach $snapFxCommit
-
-$actualCommit = (git -C $snapFxDir rev-parse HEAD).Trim()
-if ($actualCommit -ne $snapFxCommit) {
-    throw "Unexpected SnapFX source: $actualCommit"
-}
-
-& (Join-Path $snapFxDir "gradlew.bat") --no-daemon --project-dir $snapFxDir :snapfx-core:publishToMavenLocal
+& (Join-Path $root "bootstrap.ps1")
 
 Push-Location $root
 try {
-    mvn -B -ntp verify
+    Invoke-Native mvn -B -ntp verify
 
     if (-not $VerifyOnly) {
-        mvn javafx:run
+        Invoke-Native mvn javafx:run
     }
 }
 finally {
