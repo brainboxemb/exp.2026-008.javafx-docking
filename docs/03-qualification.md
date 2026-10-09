@@ -114,6 +114,15 @@ Question: is Transit applied consistently to the main workbench and newly create
 
 Pass when ordinary controls have the same light theme in both contexts and the application CSS is present in both scenes.
 
+Observed on Windows before issue #13: **not passed**. Transit was applied after
+`stage.setScene(...)` but before `stage.show()`, causing native-frame access
+while JavaFX `tkStage` was still null. The UI still rendered, but startup logged
+two native-window `NullPointerException` traces.
+
+Issue #13 changes the lifecycle so Transit CSS is prepared before show and native
+window theming is applied only after the Stage is showing. This case remains
+open until the corrected Windows run is observed without those exceptions.
+
 ### Q-09 — Dark terminal/log content
 
 Question: can Terminal, Device Log and Client Log remain dark/monospace inside the Transit light theme?

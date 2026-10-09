@@ -53,10 +53,13 @@ public final class SnapFxWorkbench {
     }
 
     /**
-     * Sets the application-owned decoration applied to every workbench scene.
+     * Sets the application-owned decoration applied to SnapFX floating scenes.
      *
-     * <p>This is deliberately expressed in terms of JavaFX {@link Scene}; the
-     * caller does not need to know how SnapFX represents floating windows.</p>
+     * <p>The primary Stage is intentionally decorated by the application after
+     * {@code Stage.show()}, because Transit native-frame theming requires the
+     * JavaFX native peer to exist. This callback keeps floating-window theming
+     * inside the same application-owned boundary without exposing SnapFX window
+     * types to the application.</p>
      */
     public void setSceneDecorator(
             Consumer<Scene> sceneDecorator) {
@@ -69,8 +72,12 @@ public final class SnapFxWorkbench {
     public void initialize(Stage stage) {
         snapFX.initialize(stage);
 
-        decorateScene(stage.getScene());
-
+        /*
+         * SnapFX shows restored floating windows during initialize(). Those
+         * windows now have a native peer, so application-owned scene
+         * decoration is safe here. The primary Stage is decorated by the
+         * application itself after Stage.show().
+         */
         for (DockFloatingWindow floatingWindow
                 : snapFX.getFloatingWindows()) {
             decorateFloatingWindow(floatingWindow);
