@@ -39,69 +39,74 @@ public final class BentoFxWorkbench {
 
         root = builder.root("root");
 
-        DockContainerBranch workspace =
-                builder.branch("workspace");
-        DockContainerBranch dataArea =
-                builder.branch("data-area");
+        DockContainerBranch leftColumn =
+                builder.branch("left-column");
+        DockContainerBranch rightColumn =
+                builder.branch("right-column");
 
         DockContainerLeaf controls =
                 builder.leaf("controls");
+        DockContainerLeaf deviceLog =
+                builder.leaf("device-log");
+        DockContainerLeaf terminal =
+                builder.leaf("terminal");
+        DockContainerLeaf clientLog =
+                builder.leaf("client-log");
+
         DockContainerLeaf registrations =
                 builder.leaf("registrations");
-        DockContainerLeaf detail =
-                builder.leaf("detail");
-        DockContainerLeaf logs =
-                builder.leaf("logs");
+        DockContainerLeaf logBook =
+                builder.leaf("logbook");
+        DockContainerLeaf tagPlot =
+                builder.leaf("tag-plot");
 
         root.setOrientation(
-                Orientation.VERTICAL);
-        workspace.setOrientation(
                 Orientation.HORIZONTAL);
-        dataArea.setOrientation(
+        leftColumn.setOrientation(
+                Orientation.VERTICAL);
+        rightColumn.setOrientation(
                 Orientation.VERTICAL);
 
         root.addContainers(
-                workspace,
-                logs);
-        workspace.addContainers(
+                leftColumn,
+                rightColumn);
+
+        leftColumn.addContainers(
                 controls,
-                dataArea);
-        dataArea.addContainers(
+                deviceLog,
+                terminal,
+                clientLog);
+
+        rightColumn.addContainers(
                 registrations,
-                detail);
+                logBook,
+                tagPlot);
 
-        controls.setSide(
-                Side.TOP);
-        registrations.setSide(
-                Side.TOP);
-        detail.setSide(
-                Side.TOP);
-        logs.setSide(
-                Side.TOP);
+        configureLeaf(controls);
+        configureLeaf(deviceLog);
+        configureLeaf(terminal);
+        configureLeaf(clientLog);
+        configureLeaf(registrations);
+        configureLeaf(logBook);
+        configureLeaf(tagPlot);
 
-        controls.setPruneWhenEmpty(false);
-        registrations.setPruneWhenEmpty(false);
-        detail.setPruneWhenEmpty(false);
-        logs.setPruneWhenEmpty(false);
-        workspace.setPruneWhenEmpty(false);
-        dataArea.setPruneWhenEmpty(false);
+        leftColumn.setPruneWhenEmpty(false);
+        rightColumn.setPruneWhenEmpty(false);
 
-        DockContainerBranch.setResizableWithParent(
-                controls,
-                false);
-        DockContainerBranch.setResizableWithParent(
-                logs,
-                false);
-
-        root.setContainerSizePx(
-                logs,
-                240);
-        workspace.setContainerSizePx(
-                controls,
-                320);
-        dataArea.setContainerSizePx(
-                detail,
-                300);
+        /*
+         * Match the current SnapFX comparison workspace as closely as
+         * practical: roughly equal columns, with more simultaneously visible
+         * tool/log areas on the left and three stacked data areas on the right.
+         */
+        root.setDividerPositions(
+                0.50);
+        leftColumn.setDividerPositions(
+                0.46,
+                0.64,
+                0.82);
+        rightColumn.setDividerPositions(
+                0.46,
+                0.76);
 
         controls.addDockables(
                 dockable(
@@ -114,33 +119,46 @@ public final class BentoFxWorkbench {
                         builder,
                         PanelCatalog.SIMULATION));
 
+        deviceLog.addDockable(
+                dockable(
+                        builder,
+                        PanelCatalog.DEVICE_LOG));
+
+        terminal.addDockable(
+                dockable(
+                        builder,
+                        PanelCatalog.TERMINAL));
+
+        clientLog.addDockable(
+                dockable(
+                        builder,
+                        PanelCatalog.CLIENT_LOG));
+
         registrations.addDockable(
                 dockable(
                         builder,
                         PanelCatalog.REGISTRATIONS));
 
-        detail.addDockables(
+        logBook.addDockable(
                 dockable(
                         builder,
-                        PanelCatalog.LOGBOOK),
+                        PanelCatalog.LOGBOOK));
+
+        tagPlot.addDockable(
                 dockable(
                         builder,
                         PanelCatalog.TAG_PLOT));
-
-        logs.addDockables(
-                dockable(
-                        builder,
-                        PanelCatalog.TERMINAL),
-                dockable(
-                        builder,
-                        PanelCatalog.DEVICE_LOG),
-                dockable(
-                        builder,
-                        PanelCatalog.CLIENT_LOG));
     }
 
     public DockContainerRootBranch root() {
         return root;
+    }
+
+    private static void configureLeaf(
+            DockContainerLeaf leaf) {
+        leaf.setSide(
+                Side.TOP);
+        leaf.setPruneWhenEmpty(false);
     }
 
     private Dockable dockable(
