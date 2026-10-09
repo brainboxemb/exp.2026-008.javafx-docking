@@ -145,3 +145,44 @@ Text,
     -fx-max-height: 14px;
     -fx-padding: 2px;
 }
+
+/* Representative Development Client data views. */
+.experiment-data-pane {
+    -fx-padding: 0;
+}
+
+.experiment-data-toolbar {
+    -fx-padding: 3px 6px;
+    -fx-spacing: 8px;
+    -fx-background-color: -fx-control-inner-background;
+    -fx-border-color: derive(-fx-background, -10%);
+    -fx-border-width: 0 0 1px 0;
+}
+
+.experiment-data-status {
+    -fx-font-weight: bold;
+}
+
+.experiment-data-table {
+    -fx-font-family: "System";
+    -fx-font-size: 12px;
+}
+
+.experiment-data-table .column-header,
+.experiment-data-table .filler {
+    -fx-size: 26px;
+}
+
+.experiment-data-table .column-header .label {
+    -fx-padding: 0 4px;
+    -fx-alignment: center-left;
+}
+
+.experiment-data-table .table-cell {
+    -fx-padding: 2px 6px;
+}
+
+.experiment-table-action {
+    -fx-padding: 1px 6px;
+    -fx-min-height: 20px;
+}

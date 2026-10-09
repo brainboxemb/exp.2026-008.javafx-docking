@@ -1,16 +1,13 @@
 package io.github.brainboxemb.experimental.docking.workbench;
 
+import io.github.brainboxemb.experimental.docking.view.LogBookPane;
+import io.github.brainboxemb.experimental.docking.view.RegistrationsPane;
 import io.github.brainboxemb.experimental.docking.view.TagPlotPane;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.util.LinkedHashMap;
@@ -57,16 +54,14 @@ public final class PanelCatalog {
         register(CLIENT_LOG, "Client Log", () -> logPane(
                 "20:12:00.910 - [INFO] - Development Client started\n"
                         + "20:12:01.002 - [INFO] - Workbench ready\n"));
-        register(REGISTRATIONS, "Registrations", () -> tablePane(
+        register(
+                REGISTRATIONS,
                 "Registrations",
-                "12:00:01.23  AUTO  101",
-                "12:00:02.07  MAN   204",
-                "12:00:03.91  AUTO  318"));
-        register(LOGBOOK, "LogBook", () -> tablePane(
+                RegistrationsPane::new);
+        register(
+                LOGBOOK,
                 "LogBook",
-                "MAN_REG    12:00:02.07",
-                "AUTO_REG   12:00:03.91",
-                "DELETE     12:00:04.14"));
+                LogBookPane::new);
         register(TAG_PLOT, "Tag Plot", TagPlotPane::new);
     }
 
@@ -116,20 +111,4 @@ public final class PanelCatalog {
         return area;
     }
 
-    private static Node tablePane(String title, String... rows) {
-        TableView<String> table = new TableView<>(
-                FXCollections.observableArrayList(rows));
-        TableColumn<String, String> value = new TableColumn<>(title);
-        value.setCellValueFactory(cell ->
-                new ReadOnlyStringWrapper(cell.getValue()));
-        value.setPrefWidth(460);
-        table.getColumns().add(value);
-        table.setColumnResizePolicy(
-                TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-        VBox.setVgrow(table, Priority.ALWAYS);
-
-        VBox box = new VBox(table);
-        box.getStyleClass().add("experiment-table-panel");
-        return box;
-    }
 }
