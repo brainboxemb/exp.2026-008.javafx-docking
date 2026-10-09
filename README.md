@@ -1,6 +1,13 @@
 # JavaFX Docking Experiment
 
+Status: **complete — JavaFX workbench qualified; BentoFX preferred for Engineering Client follow-up**
+
 Proof-of-principle repository for evaluating an IDE-style dockable JavaFX workbench for the Event Timing Development Client.
+
+Experiment 008 is complete. The cross-project closeout is owned by
+`brainboxemb.meta` and records BentoFX as the preferred docking candidate for
+the Event Timing Engineering Client direction. This repository remains retained
+as implementation/evidence and is not a production dependency.
 
 Cross-project coordination: [brainboxemb.meta Experiment 008](https://github.com/brainboxemb/brainboxemb.meta/blob/main/experiments/008-javafx-docking/README.md), tracking issue [brainboxemb.meta#183](https://github.com/brainboxemb/brainboxemb.meta/issues/183).
 
@@ -166,3 +173,35 @@ classpath can create platform-specific mixed JavaFX runtimes.
 The experiment explicitly supplies JavaFX 21.0.10. Automated qualification
 also rejects any other `org.openjfx` version appearing on the runtime
 classpath.
+
+
+## Closeout result
+
+The experiment answered its main question positively: ordinary JavaFX views can
+remain independent from docking infrastructure while a small workbench adapter
+owns docking-specific composition.
+
+The retained comparison is:
+
+- **BentoFX 0.16.0 is preferred** for follow-up Engineering Client work because
+  its explicit root/branch/leaf model maps clearly to the workbench, it required
+  less corrective adapter/presentation code, and it resolves through Maven
+  Central normally;
+- **SnapFX 0.8.0 remains useful comparison evidence** for built-in persistence
+  and floating-window behaviour, but its release-JAR bootstrap and additional
+  lifecycle/style/chrome handling are production costs;
+- **Java 21 / JavaFX 21** is a proven experiment baseline;
+- the application-owned panel/content model remained independent from both
+  docking frameworks;
+- the Raw Data selection model demonstrated that application interaction belongs
+  outside the docking layer.
+
+The experiment does **not** decide final Engineering Client packaging, JPMS
+module-path use, installer/update strategy, or a future scripting engine. Those
+belong to the owning Event Timing engineering-client architecture.
+
+Final representative source:
+`aea57c394743e742778c3493652ebc5f564f6a7d`.
+
+Cross-project conclusion:
+[brainboxemb.meta Experiment 008](https://github.com/brainboxemb/brainboxemb.meta/blob/main/experiments/008-javafx-docking/README.md).

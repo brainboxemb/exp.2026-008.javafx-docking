@@ -240,3 +240,28 @@ restored automatically after the floating layout rebuild.
 
 Pass when a single floated panel shows one title/chrome row while multi-panel
 floating layouts retain enough internal chrome for docking.
+
+
+## Closeout
+
+Experiment 008 is complete.
+
+Not every exploratory interactive case above is promoted to an individual formal
+pass. The retained evidence is sufficient for the architectural decision the PoP
+was created to support:
+
+- framework-independent JavaFX application views are viable;
+- BentoFX is the preferred workbench candidate for follow-up work;
+- SnapFX's normal-Maven-path limitation is a material adoption disadvantage;
+- JavaFX runtime/version ownership must remain application-owned.
+
+Open-ended product questions are intentionally **not** forced closed inside the
+PoP. In particular:
+
+- final layout persistence for a BentoFX-based product;
+- full multi-monitor/floating product UX;
+- JPMS/module-path versus classpath packaging;
+- `jpackage`/installer/runtime-image choices.
+
+These are owner decisions for the Event Timing Engineering Client and should use
+this repository as evidence rather than extending Experiment 008 indefinitely.
