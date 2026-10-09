@@ -105,3 +105,43 @@ Text,
     -fx-opacity: 0.75;
     -fx-padding: 0 4px;
 }
+
+/*
+ * SnapFX ships its docking-tab labels at 11 px, while Transit and the
+ * application workbench use 12 px. Keep the docking chrome visually aligned
+ * with the rest of the desktop UI without changing SnapFX behaviour.
+ */
+.dock-tab-pane {
+    -fx-tab-min-height: 24px;
+    -fx-tab-max-height: 24px;
+}
+
+.dock-tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-padding: 0 6px 0 6px;
+}
+
+.dock-tab-pane .tab .tab-label {
+    -fx-font-family: "System";
+    -fx-font-size: 12px;
+    -fx-font-weight: normal;
+}
+
+.dock-tab-float-button {
+    -fx-min-width: 14px;
+    -fx-pref-width: 14px;
+    -fx-max-width: 14px;
+    -fx-min-height: 14px;
+    -fx-pref-height: 14px;
+    -fx-max-height: 14px;
+    -fx-padding: 0;
+}
+
+.dock-tab-pane .tab-close-button {
+    -fx-min-width: 14px;
+    -fx-pref-width: 14px;
+    -fx-max-width: 14px;
+    -fx-min-height: 14px;
+    -fx-pref-height: 14px;
+    -fx-max-height: 14px;
+    -fx-padding: 2px;
+}

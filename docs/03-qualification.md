@@ -172,3 +172,15 @@ also removed.
 
 Pass when the tab text remains comfortably readable and the visible header
 height is close to the compact SnapFX workbench.
+
+### Q-11 — SnapFX compact tab typography
+
+Question: can SnapFX docking tabs use the same typography and density as the
+application workbench while retaining float and close actions?
+
+The experiment overrides SnapFX's 11 px tab-label default with 12 px JavaFX
+`System`, normal weight, 24 px tab height, compact horizontal padding and
+14 px float/close controls.
+
+Pass when the tabs visually match the surrounding workbench and their float and
+close actions remain easy to use.
