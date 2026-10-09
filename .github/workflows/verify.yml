@@ -33,48 +33,14 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Checkout pinned SnapFX source
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          repository: Beowolve/SnapFX
-          ref: v0.8.0
-          fetch-depth: 0
-          path: .deps/SnapFX
-
-      - name: Verify SnapFX source pin
-        shell: bash
-        run: |
-          actual="$(git -C .deps/SnapFX rev-parse HEAD)"
-          expected="6253f6443c74718b2bb8f861835dc97c6f5e374f"
-          test "$actual" = "$expected"
-
-      - name: Publish pinned SnapFX core to Maven local (Linux)
-        if: runner.os == 'Linux'
-        shell: bash
-        run: |
-          chmod +x .deps/SnapFX/gradlew
-          .deps/SnapFX/gradlew \
-            --no-daemon \
-            --project-dir .deps/SnapFX \
-            :snapfx-core:publishToMavenLocal
-
-      - name: Bootstrap SnapFX dependency (Windows)
-        if: runner.os == 'Windows'
+      - name: Bootstrap SnapFX release dependency
         shell: pwsh
-        run: .\bootstrap.ps1
+        run: ./bootstrap.ps1
 
-      - name: Verify SnapFX Maven artifact (Linux)
-        if: runner.os == 'Linux'
-        shell: bash
-        run: |
-          test -f "$HOME/.m2/repository/org/snapfx/snapfx-core/0.8.0-0/snapfx-core-0.8.0-0.jar"
-          test -f "$HOME/.m2/repository/org/snapfx/snapfx-core/0.8.0-0/snapfx-core-0.8.0-0.pom"
-
-      - name: Verify SnapFX Maven artifact (Windows)
-        if: runner.os == 'Windows'
+      - name: Verify SnapFX Maven artifact
         shell: pwsh
         run: |
-          $base = Join-Path $HOME ".m2\repository\org\snapfx\snapfx-core\0.8.0-0"
+          $base = Join-Path $HOME ".m2/repository/org/snapfx/snapfx-core/0.8.0-0"
           if (-not (Test-Path (Join-Path $base "snapfx-core-0.8.0-0.jar"))) {
             throw "SnapFX JAR missing from Maven local"
           }

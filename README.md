@@ -8,7 +8,7 @@ Cross-project coordination: [brainboxemb.meta Experiment 008](https://github.com
 
 SnapFX v0.8.0 is **not available from Maven Central**. On a clean checkout, plain `mvn verify`, `mvn javafx:run` and the initial NetBeans Maven import therefore cannot resolve `org.snapfx:snapfx-core:0.8.0-0` yet.
 
-On Windows, bootstrap the pinned SnapFX dependency once:
+Bootstrap the pinned SnapFX dependency once:
 
 ```powershell
 .\bootstrap.ps1
@@ -91,7 +91,7 @@ The Tag Plot exists to exercise a dynamic/realtime view; it is not intended to i
 
 SnapFX currently targets Java 21+ / JavaFX 21+. The first candidate is pinned to tag `v0.8.0`.
 
-Until a normal Maven Central dependency is verified for the chosen version, the experiment consumes SnapFX through a reproducible local-publish step from the pinned upstream tag rather than committing third-party binaries.
+Until a normal Maven Central dependency is available for the chosen version, the experiment downloads the pinned upstream GitHub Release JAR, verifies its SHA-256 and installs it into Maven local with retained dependency metadata. No SnapFX source checkout or Gradle build is required.
 
 ## Theme dependency
 
@@ -101,7 +101,7 @@ The current Transit source uses Java 17 and JavaFX 22. Compatibility with this e
 
 ## Windows helper
 
-`bootstrap.ps1` owns the SnapFX source checkout and Maven-local publication. `run.ps1` calls that bootstrap first, runs `mvn verify`, and then launches the experiment. Use `.\run.ps1 -VerifyOnly` to bootstrap and verify without opening the UI.
+`bootstrap.ps1` owns the verified GitHub Release JAR download and Maven-local installation. `run.ps1` calls that bootstrap first, runs `mvn verify`, and then launches the experiment. Use `.\run.ps1 -VerifyOnly` to bootstrap and verify without opening the UI.
 
 ## Decision rule
 
