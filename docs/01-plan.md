@@ -83,13 +83,27 @@ If either candidate fails those criteria, record the failure and evaluate the ne
 
 BentoFX 0.16.0 is evaluated against the same representative panels.
 
-The first comparison deliberately uses BentoFX as designed:
+The BentoFX comparison uses the same visible default composition as the current
+SnapFX workspace so the comparison is not biased by a different UI concept.
 
-- explicit root/branch/leaf layout;
-- tool-area sizing through the container model;
-- built-in external/floating stages;
-- Maven Central dependency;
-- application-owned compact CSS.
+Default composition:
+
+```text
+left                            right
+---------------------------     ---------------------------
+TimingNode / Registration /     Registrations
+Simulation (tabs)               ---------------------------
+---------------------------     LogBook
+Device Log                      ---------------------------
+---------------------------     Tag Plot
+Terminal
+---------------------------
+Client Log
+```
+
+BentoFX still uses its explicit root/branch/leaf model internally, with built-in
+external/floating stages, Maven Central dependency and application-owned compact
+CSS.
 
 Do not add application-owned layout persistence during the first BentoFX pass.
 If BentoFX has no equivalent of SnapFX JSON save/load, retain that as a candidate
