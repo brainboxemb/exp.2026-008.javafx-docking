@@ -32,6 +32,28 @@
       <groupId>com.pixelduke</groupId>
       <artifactId>transit</artifactId>
       <version>${transit.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-base</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-graphics</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-controls</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-media</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-web</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.snapfx</groupId>
@@ -42,6 +64,28 @@
       <groupId>software.coley.bento-fx</groupId>
       <artifactId>core</artifactId>
       <version>${bentofx.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-base</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-graphics</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-controls</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-media</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-web</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

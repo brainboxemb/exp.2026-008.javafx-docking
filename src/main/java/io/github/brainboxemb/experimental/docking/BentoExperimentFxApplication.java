@@ -8,6 +8,7 @@ import io.github.brainboxemb.experimental.docking.workbench.PanelCatalog;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import software.coley.bentofx.layout.container.DockContainerLeaf;
 
 import java.net.URL;
 
@@ -25,6 +26,10 @@ public final class BentoExperimentFxApplication extends Application {
     }
 
     static void showCandidate(Stage stage) {
+        JavaFxRuntimeDiagnostics.log(
+                "before BentoFX workbench",
+                DockContainerLeaf.class);
+
         PanelCatalog catalog = new PanelCatalog();
         BentoFxWorkbench workbench =
                 new BentoFxWorkbench(catalog);
