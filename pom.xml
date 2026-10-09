@@ -14,6 +14,7 @@
     <javafx.version>21.0.10</javafx.version>
     <transit.version>2.0.0</transit.version>
     <snapfx.version>0.8.0-0</snapfx.version>
+    <bentofx.version>0.16.0</bentofx.version>
     <junit.version>5.10.2</junit.version>
     <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
     <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
@@ -36,6 +37,11 @@
       <groupId>org.snapfx</groupId>
       <artifactId>snapfx-core</artifactId>
       <version>${snapfx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>software.coley.bento-fx</groupId>
+      <artifactId>core</artifactId>
+      <version>${bentofx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

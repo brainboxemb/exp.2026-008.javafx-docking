@@ -17,7 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Creates representative Development Client panels without depending on SnapFX.
+ * Creates representative Development Client panels without depending on a docking framework.
  */
 public final class PanelCatalog {
 
