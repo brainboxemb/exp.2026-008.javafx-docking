@@ -39,7 +39,7 @@
 }
 
 .header {
-    -fx-padding: 3px 8px;
+    -fx-padding: 0;
 }
 
 .header:hover {
@@ -55,10 +55,10 @@
     -fx-border-width: 0 0 2px 0;
 }
 
-.header .label {
+.header Text {
     -fx-font-family: "System";
     -fx-font-size: 12px;
-    -fx-text-fill: -bento-text;
+    -fx-fill: -bento-text;
 }
 
 .header-pane .close-button,

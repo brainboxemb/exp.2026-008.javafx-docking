@@ -34,6 +34,14 @@ public final class BentoFxWorkbench {
         bento.stageBuilding()
                 .setApplyMousePosition(true);
 
+        bento.controlsBuilding()
+                .setHeaderFactory(
+                        (dockable, parentPane) ->
+                                new CompactBentoHeader(
+                                        dockable,
+                                        parentPane)
+                                        .withDragDrop());
+
         DockBuilding builder =
                 bento.dockBuilding();
 
