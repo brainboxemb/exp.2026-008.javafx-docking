@@ -29,11 +29,6 @@ public final class BentoFxWorkbench {
             PanelCatalog catalog) {
         this.catalog = catalog;
 
-        bento.stageBuilding()
-                .setApplySourceAsOwner(false);
-        bento.stageBuilding()
-                .setApplyMousePosition(true);
-
         DockBuilding builder =
                 bento.dockBuilding();
 
@@ -86,10 +81,10 @@ public final class BentoFxWorkbench {
         workspace.setPruneWhenEmpty(false);
         dataArea.setPruneWhenEmpty(false);
 
-        DockContainerBranch.setResizableWithParent(
+        workspace.setContainerResizable(
                 controls,
                 false);
-        DockContainerBranch.setResizableWithParent(
+        root.setContainerResizable(
                 logs,
                 false);
 

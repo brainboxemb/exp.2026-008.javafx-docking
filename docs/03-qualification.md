@@ -138,3 +138,27 @@ Pass when updates continue without duplicate timelines, freezes or layout corrup
 ## Evidence rule
 
 Do not mark an interactive case passed from source inspection alone. Record the Windows run, exact experiment commit and observed result after the case has actually been executed.
+
+## BentoFX candidate compatibility
+
+### B-01 — JavaFX 21 runtime compatibility
+
+Question: can the BentoFX candidate run on the same JavaFX 21 baseline as SnapFX?
+
+BentoFX 0.16.0 status: **not passed**.
+
+Observed on Windows:
+
+```text
+java.lang.NoSuchMethodError:
+javafx.beans.property.ObjectProperty.map(java.util.function.Function)
+    at software.coley.bentofx.layout.container.DockContainerLeaf.<init>(...)
+```
+
+The experiment does not raise its JavaFX baseline merely to make candidate 2
+work. BentoFX is therefore pinned to 0.15.1 for the JavaFX 21 comparison.
+
+BentoFX 0.15.1 is documented for JavaFX 19+ / Java 17+. Its Maven coordinates
+are `software.coley:bento-fx:0.15.1`.
+
+Status for 0.15.1: **pending interactive Windows confirmation**.

@@ -81,7 +81,13 @@ If either candidate fails those criteria, record the failure and evaluate the ne
 
 ## Candidate 2 — BentoFX + Transit
 
-BentoFX 0.16.0 is evaluated against the same representative panels.
+BentoFX 0.15.1 is evaluated against the same representative panels on the JavaFX 21 baseline.
+
+BentoFX 0.16.0 was initially tried, but the interactive Windows run failed with
+a `NoSuchMethodError` in `DockContainerLeaf` while invoking
+`ObjectProperty.map(...)`. Rather than raising the experiment JavaFX baseline,
+candidate 2 is pinned to the latest 0.15.x release, which is documented for
+JavaFX 19+ / Java 17+.
 
 The first comparison deliberately uses BentoFX as designed:
 

@@ -70,7 +70,7 @@ The experiment is intentionally separate from the production Development Client.
 - Maven
 - Transit 2.0.0 as application look-and-feel baseline
 - SnapFX as the first docking candidate
-- BentoFX 0.16.0 as the second docking candidate
+- BentoFX 0.15.1 as the JavaFX 21 comparison candidate
 
 Transit and SnapFX are evaluated as replaceable infrastructure around ordinary JavaFX views. The application panels must not depend on either theme or docking-specific APIs unless the experiment proves that such coupling is unavoidable.
 
