@@ -20,8 +20,12 @@ import javafx.scene.layout.HBox;
  */
 public final class RegistrationsPane extends BorderPane {
 
+    private final RawDataModel rawDataModel;
+
     public RegistrationsPane(
             RawDataModel rawDataModel) {
+        this.rawDataModel =
+                rawDataModel;
         TableView<RegistrationRow> table =
                 new TableView<>(
                         FXCollections.observableArrayList(
@@ -30,19 +34,34 @@ public final class RegistrationsPane extends BorderPane {
                                         "AUTO",
                                         "101",
                                         "AUTO",
-                                        "LIVE"),
+                                        "LIVE",
+                                        registrationMessage(
+                                                41,
+                                                "101",
+                                                "AUTO",
+                                                "12:00:01.230")),
                                 new RegistrationRow(
                                         "12:00:02.070",
                                         "MAN",
                                         "204",
                                         "MAN",
-                                        "LIVE"),
+                                        "LIVE",
+                                        registrationMessage(
+                                                42,
+                                                "204",
+                                                "MAN",
+                                                "12:00:02.070")),
                                 new RegistrationRow(
                                         "12:00:03.910",
                                         "AUTO",
                                         "318",
                                         "AUTO",
-                                        "LIVE")));
+                                        "LIVE",
+                                        registrationMessage(
+                                                43,
+                                                "318",
+                                                "AUTO",
+                                                "12:00:03.910"))));
 
         table.getStyleClass().add(
                 "experiment-data-table");
