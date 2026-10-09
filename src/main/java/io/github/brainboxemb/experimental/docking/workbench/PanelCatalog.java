@@ -1,8 +1,9 @@
 package io.github.brainboxemb.experimental.docking.workbench;
 
 import io.github.brainboxemb.experimental.docking.view.LogBookPane;
+import io.github.brainboxemb.experimental.docking.view.RawDataModel;
+import io.github.brainboxemb.experimental.docking.view.RawDataPane;
 import io.github.brainboxemb.experimental.docking.view.RegistrationsPane;
-import io.github.brainboxemb.experimental.docking.view.TagPlotPane;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,9 +27,11 @@ public final class PanelCatalog {
     public static final String CLIENT_LOG = "client-log";
     public static final String REGISTRATIONS = "registrations";
     public static final String LOGBOOK = "logbook";
-    public static final String TAG_PLOT = "tag-plot";
+    public static final String RAW_DATA = "raw-data";
 
     private final Map<String, WorkbenchPanel> panels = new LinkedHashMap<>();
+    private final RawDataModel rawDataModel =
+            new RawDataModel();
 
     public PanelCatalog() {
         register(TIMING_NODE, "TimingNode", () -> controlsPane(
@@ -57,12 +60,18 @@ public final class PanelCatalog {
         register(
                 REGISTRATIONS,
                 "Registrations",
-                RegistrationsPane::new);
+                () -> new RegistrationsPane(
+                        rawDataModel));
         register(
                 LOGBOOK,
                 "LogBook",
-                LogBookPane::new);
-        register(TAG_PLOT, "Tag Plot", TagPlotPane::new);
+                () -> new LogBookPane(
+                        rawDataModel));
+        register(
+                RAW_DATA,
+                "Raw Data",
+                () -> new RawDataPane(
+                        rawDataModel));
     }
 
     public WorkbenchPanel get(String id) {
