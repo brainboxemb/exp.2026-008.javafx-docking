@@ -27,6 +27,9 @@ public final class DockingExperimentChooserFxApplication
 
     @Override
     public void start(Stage stage) {
+        JavaFxRuntimeDiagnostics.log(
+                "chooser startup");
+
         Label heading =
                 new Label("Choose docking candidate");
         heading.getStyleClass().add(
