@@ -34,6 +34,14 @@ public final class BentoFxWorkbench {
         bento.stageBuilding()
                 .setApplyMousePosition(true);
 
+        bento.controlsBuilding()
+                .setHeaderFactory(
+                        (dockable, parentPane) ->
+                                new CompactBentoHeader(
+                                        dockable,
+                                        parentPane)
+                                        .withDragDrop());
+
         DockBuilding builder =
                 bento.dockBuilding();
 
@@ -158,7 +166,12 @@ public final class BentoFxWorkbench {
             DockContainerLeaf leaf) {
         leaf.setSide(
                 Side.TOP);
-        leaf.setPruneWhenEmpty(false);
+
+        /*
+         * Keep BentoFX's default pruneWhenEmpty=true. When the last dockable
+         * moves out of a panel area, the empty leaf should disappear and the
+         * parent split should immediately redistribute the freed space.
+         */
     }
 
     private Dockable dockable(

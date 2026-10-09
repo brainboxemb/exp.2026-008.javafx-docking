@@ -138,3 +138,37 @@ Pass when updates continue without duplicate timelines, freezes or layout corrup
 ## Evidence rule
 
 Do not mark an interactive case passed from source inspection alone. Record the Windows run, exact experiment commit and observed result after the case has actually been executed.
+
+## BentoFX interactive comparison
+
+### B-02 — Empty source area pruning
+
+Question: when the only dockable in a BentoFX leaf is moved into another leaf,
+does the empty source area disappear and does the parent split redistribute the
+freed space automatically?
+
+Reference action:
+
+```text
+Terminal -> Device Log (center/tab drop)
+```
+
+Pass when Terminal becomes a tab beside Device Log, the old Terminal area is
+removed from the layout, and the remaining left-column areas expand without
+application code resizing individual split dividers.
+
+The top-level left/right comparison columns remain explicitly non-pruning so the
+overall two-column workspace stays stable.
+
+### B-03 — Compact header metrics
+
+Question: can BentoFX tab/header chrome be made as compact as the SnapFX
+comparison without shrinking normal UI text?
+
+The experiment uses BentoFX's supported Header factory and keeps the font at
+12 px while reducing the internal GridPane padding from 6 px on every side to
+2 px vertical / 6 px horizontal. The outer application CSS header padding is
+also removed.
+
+Pass when the tab text remains comfortably readable and the visible header
+height is close to the compact SnapFX workbench.
