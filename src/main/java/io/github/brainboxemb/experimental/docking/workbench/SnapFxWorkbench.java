@@ -15,7 +15,10 @@ import org.snapfx.persistence.DockLayoutLoadException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -33,6 +36,11 @@ public final class SnapFxWorkbench {
 
     private Consumer<Scene> sceneDecorator =
             scene -> { };
+
+    private final Set<DockFloatingWindow>
+            floatingHeaderPolicyInstalled =
+                    Collections.newSetFromMap(
+                            new IdentityHashMap<>());
 
     public SnapFxWorkbench(
             PanelCatalog catalog,
@@ -129,7 +137,55 @@ public final class SnapFxWorkbench {
 
     private void decorateFloatingWindow(
             DockFloatingWindow floatingWindow) {
-        decorateScene(floatingWindow.getScene());
+        installFloatingHeaderPolicy(
+                floatingWindow);
+        decorateScene(
+                floatingWindow.getScene());
+
+        /*
+         * The floating scene graph can be rebuilt on the same JavaFX pulse as
+         * the window is created. Apply the single-panel header rule once more
+         * after that rebuild has completed.
+         */
+        Platform.runLater(
+                () -> updateFloatingInnerHeaders(
+                        floatingWindow));
+    }
+
+    private void installFloatingHeaderPolicy(
+            DockFloatingWindow floatingWindow) {
+        if (!floatingHeaderPolicyInstalled.add(
+                floatingWindow)) {
+            return;
+        }
+
+        floatingWindow.getDockGraph()
+                .revisionProperty()
+                .addListener(
+                        (observable, oldRevision, newRevision) ->
+                                Platform.runLater(
+                                        () -> Platform.runLater(
+                                                () ->
+                                                        updateFloatingInnerHeaders(
+                                                                floatingWindow))));
+    }
+
+    private void updateFloatingInnerHeaders(
+            DockFloatingWindow floatingWindow) {
+        var nodes =
+                floatingWindow.getDockNodes();
+        boolean showInnerHeaders =
+                nodes.size() > 1;
+
+        for (DockNode node : nodes) {
+            var nodeView =
+                    floatingWindow.getDockNodeView(
+                            node);
+            if (nodeView != null) {
+                nodeView.setHeaderVisible(
+                        showInnerHeaders);
+            }
+        }
     }
 
     private void decorateScene(Scene scene) {
@@ -173,19 +229,36 @@ public final class SnapFxWorkbench {
                 timingNode,
                 DockPosition.RIGHT);
 
+        /*
+         * Keep logs and data tools visible as separate dock areas in the
+         * default comparison layout. Consecutive BOTTOM docks flatten into the
+         * existing vertical split, so each panel receives its own area.
+         */
+        graph.dock(
+                deviceLog,
+                timingNode,
+                DockPosition.BOTTOM);
         graph.dock(
                 terminal,
-                timingNode,
+                deviceLog,
+                DockPosition.BOTTOM);
+        graph.dock(
+                clientLog,
+                terminal,
                 DockPosition.BOTTOM);
 
         graph.dock(
                 logBook,
                 registrations,
                 DockPosition.BOTTOM);
+        graph.dock(
+                tagPlot,
+                logBook,
+                DockPosition.BOTTOM);
 
         /*
-         * Only now create the local tab groups. These DockTabPane instances
-         * replace their leaf targets inside the already established split tree.
+         * Only the three control panels are a default tab group. Create that
+         * local DockTabPane after the surrounding split structure exists.
          */
         graph.dock(
                 registration,
@@ -194,20 +267,6 @@ public final class SnapFxWorkbench {
         graph.dock(
                 simulation,
                 timingNode,
-                DockPosition.CENTER);
-
-        graph.dock(
-                deviceLog,
-                terminal,
-                DockPosition.CENTER);
-        graph.dock(
-                clientLog,
-                terminal,
-                DockPosition.CENTER);
-
-        graph.dock(
-                tagPlot,
-                logBook,
                 DockPosition.CENTER);
 
         snapFX.setRootSplitRatios(
