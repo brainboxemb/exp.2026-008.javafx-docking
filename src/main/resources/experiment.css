@@ -171,18 +171,53 @@ Text,
 .experiment-data-table .column-header,
 .experiment-data-table .filler {
     -fx-size: 26px;
+    -fx-background-color:
+            derive(-fx-control-inner-background, -3%);
+    -fx-border-color:
+            transparent
+            derive(-fx-background, -16%)
+            derive(-fx-background, -16%)
+            transparent;
+    -fx-border-width: 0 1px 1px 0;
 }
 
 .experiment-data-table .column-header .label {
     -fx-padding: 0 4px;
     -fx-alignment: center-left;
+    -fx-font-weight: bold;
+}
+
+.experiment-data-table .table-row-cell:odd {
+    -fx-background-color:
+            derive(-fx-control-inner-background, -2%);
+}
+
+.experiment-data-table .table-row-cell:selected {
+    -fx-background-color: -fx-selection-bar;
 }
 
 .experiment-data-table .table-cell {
     -fx-padding: 2px 6px;
+    -fx-border-color:
+            transparent
+            derive(-fx-background, -10%)
+            derive(-fx-background, -7%)
+            transparent;
+    -fx-border-width: 0 1px 1px 0;
+}
+
+.experiment-data-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: -fx-selection-bar-text;
 }
 
 .experiment-table-action {
-    -fx-padding: 1px 6px;
+    -fx-font-family: "System";
+    -fx-font-size: 12px;
+    -fx-padding: 0;
+    -fx-min-width: 24px;
+    -fx-pref-width: 24px;
+    -fx-max-width: 24px;
     -fx-min-height: 20px;
+    -fx-pref-height: 20px;
+    -fx-max-height: 20px;
 }

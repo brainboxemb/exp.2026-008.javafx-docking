@@ -9,7 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
@@ -77,8 +79,11 @@ public final class RegistrationsPane extends BorderPane {
                                 .stateProperty());
 
         TableColumn<RegistrationRow, RegistrationRow> delete =
-                new TableColumn<>("Delete");
-        delete.setPrefWidth(72);
+                new TableColumn<>("");
+        delete.setMinWidth(44);
+        delete.setPrefWidth(44);
+        delete.setMaxWidth(44);
+        delete.setResizable(false);
         delete.setSortable(false);
         delete.setCellValueFactory(
                 cell ->
@@ -95,6 +100,26 @@ public final class RegistrationsPane extends BorderPane {
                 code,
                 state,
                 delete);
+
+        table.setRowFactory(
+                ignored ->
+                        new TableRow<>() {
+                            @Override
+                            protected void updateItem(
+                                    RegistrationRow row,
+                                    boolean empty) {
+                                super.updateItem(
+                                        row,
+                                        empty);
+                                setOpacity(
+                                        !empty
+                                                && row != null
+                                                && "DELETED".equals(
+                                                        row.state())
+                                                ? 0.55
+                                                : 1.0);
+                            }
+                        });
 
         Label mode =
                 new Label("LIVE");
@@ -144,11 +169,18 @@ public final class RegistrationsPane extends BorderPane {
                     <RegistrationRow, RegistrationRow> {
 
         private final Button button =
-                new Button("Delete");
+                new Button("🗑");
 
         private DeleteCell() {
             button.getStyleClass().add(
                     "experiment-table-action");
+            button.setAccessibleText(
+                    "Delete registration");
+            button.setTooltip(
+                    new Tooltip(
+                            "Mark registration deleted; "
+                                    + "the technical LogBook entry remains."));
+            button.setFocusTraversable(false);
         }
 
         @Override
@@ -164,13 +196,17 @@ public final class RegistrationsPane extends BorderPane {
                 return;
             }
 
-            button.setDisable(
-                    "DELETED".equals(
-                            row.state()));
+            if ("DELETED".equals(
+                    row.state())) {
+                setGraphic(null);
+                return;
+            }
+
             button.setOnAction(
                     event -> {
                         row.markDeleted();
-                        button.setDisable(true);
+                        setGraphic(null);
+                        getTableView().refresh();
                     });
 
             setGraphic(button);
